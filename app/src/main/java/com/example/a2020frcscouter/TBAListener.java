@@ -21,7 +21,7 @@ public class TBAListener implements Response.Listener<JSONObject> {
 
 
     @Override
-    public void onResponse(JSONObject response) {
+    public void onResponse(JSONObject response) { //The response represents a single match
         HashMap[] map = null;
         FRC2019Team team = null;
 
@@ -43,10 +43,12 @@ public class TBAListener implements Response.Listener<JSONObject> {
         for (HashMap e : map) {
             Log.v("minto", e.toString());
 
-            team = FRC2019Team.buildTeam(e.entrySet());
             //TODO Add team to data
+            DataHandler.updateTeam(FRC2020Team.buildTeam(e.entrySet())); //Update the teams
             helper.updateTeamStats(team);
         }
+
+        DataHandler.updateMatch(response); //Update the match
 
     }
 

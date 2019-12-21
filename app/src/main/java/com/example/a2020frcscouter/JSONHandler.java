@@ -14,7 +14,7 @@ public class JSONHandler {
 
     // Returns a HashMap<String, Object> array that contains the match data for each team
     @SuppressWarnings("unchecked")
-    public static HashMap<String, Object>[] getMatchData(JSONObject matchJSON) throws JSONException {
+    public static HashMap<String, Object>[] getMatchData(JSONObject matchJSON) throws JSONException { //returns an array of hashmaps, each of which represents a team
         HashMap<String, Object>[] infoTable = (HashMap<String, Object>[]) new HashMap[6];
         for(int x = 0; x < infoTable.length; x++) {
             infoTable[x] = new HashMap<String, Object>();
