@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,17 +25,12 @@ import android.widget.Spinner;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import static com.example.a2020frcscouter.TBAHandler.helper;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 
-/*
-TODO // IMPROVE RESPONSIVENESS!!!!!!!
-TODO // or not, I mean only you and Raf will probably use the app a lot
-TODO // Finish team info page
-TODO // Sorting by different values //DONE
-TODO // settings page
-TODO // Replace for 2019 data //DONE
-TODO //
- */
+import static com.example.a2020frcscouter.TBAHandler.helper;
 
 public class MainActivity extends FragmentActivity implements ListFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener {
     public static Context c; // Static context that can be accessed from other classes
@@ -117,8 +113,13 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
-                MainActivity.list.setAdapter(todoAdapter);
+                for (int i = 1; i < 82; i++) {
+                    handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019caoc", i));
+                }
+
+                DataHandler.printTeamsList();
+//                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
+//                MainActivity.list.setAdapter(todoAdapter);
             }
         });
 
