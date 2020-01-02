@@ -25,6 +25,8 @@ import android.widget.Spinner;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONObject;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -42,46 +44,47 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
     public static SharedPreferences sharedPref;
     public static String TBAKey;
     public static Spinner sortSpinner;
-    public static ArrayAdapter<CharSequence> adap;
+    public static ArrayAdapter<CharSequence> selectionAdapter;
+    public static ArrayAdapter<JSONObject> listAdapter;
     public static RequestQueue queue;
 
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment;
-            Intent intent;
-            FragmentTransaction transaction;
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-//                    fragment = new ListFragment();
+//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+//
+//        @Override
+//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//            Fragment fragment;
+//            Intent intent;
+//            FragmentTransaction transaction;
+//            switch (item.getItemId()) {
+//                case R.id.navigation_home:
+////                    fragment = new ListFragment();
+////                    transaction = getSupportFragmentManager().beginTransaction();
+////                    transaction.replace(R.id.listFrameLayout, fragment);
+////                    transaction.commit(); //TODO FUCK SHIT UP
+//
+//                    intent = getIntent();
+//                    finish();
+//                    startActivity(intent);
+//
+//                    //mTextMessage.setText(R.string.title_home);
+//                    return true;
+//                case R.id.navigation_dashboard:
+//
+//                    //mTextMessage.setText(R.string.title_dashboard);
+//                    return true;
+//                case R.id.navigation_notifications:
+//                    fragment = new SettingsFragment();
 //                    transaction = getSupportFragmentManager().beginTransaction();
-//                    transaction.replace(R.id.listFrameLayout, fragment);
-//                    transaction.commit(); //TODO FUCK SHIT UP
-
-                    intent = getIntent();
-                    finish();
-                    startActivity(intent);
-
-                    //mTextMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-
-                    //mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    fragment = new SettingsFragment();
-                    transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.settingsFrameLayout, fragment);
-                    transaction.commit();
-                    //mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };
+//                    transaction.replace(R.id.settingsFrameLayout, fragment);
+//                    transaction.commit();
+//                    //mTextMessage.setText(R.string.title_notifications);
+//                    return true;
+//            }
+//            return false;
+//        }
+//    };
 
     public static int getCurrentMatch() {
         return currentMatch;
@@ -93,7 +96,9 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         c = getBaseContext();
+
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
@@ -101,6 +106,7 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         button = findViewById(R.id.button);
         list = findViewById(R.id.listMain);
         handler = new TBAHandler(this);
+
         TBAKey = sharedPref.getString(getString(R.string.settings_key_key), "yeet");
         queue = Volley.newRequestQueue(this);
         queue.start();
@@ -124,11 +130,12 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         });
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         sortSpinner = findViewById(R.id.sortSpinner);
-        adap = ArrayAdapter.createFromResource(this, R.array.sort_array, android.R.layout.simple_spinner_item);
-        adap.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        sortSpinner.setAdapter(adap);
+        selectionAdapter = ArrayAdapter.createFromResource(this, R.array.sort_array, android.R.layout.simple_spinner_item);
+        selectionAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(selectionAdapter);
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
