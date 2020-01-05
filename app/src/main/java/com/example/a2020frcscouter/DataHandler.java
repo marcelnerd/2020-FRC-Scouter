@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class DataHandler {
 
     public final static String filepath = ""; //TODO figure out filepath
-    private final static String[] scoreKeys = {"teamNum", "cargoPoints", "hatchPanelPoints", "teleopPoints", "autoPoints", "habClimbPoints"}; //TODO replace these keys
+    public final static String[] scoreKeys = {"teamNum", "cargoPoints", "hatchPanelPoints", "teleopPoints", "autoPoints", "habClimbPoints"}; //TODO replace these keys
 
     public static ArrayList<JSONObject> teamList = new ArrayList<>();
     public static ArrayList<JSONObject> matchList = new ArrayList<>();
@@ -102,7 +102,13 @@ public class DataHandler {
 
         try {
             br = new BufferedReader(new FileReader(file));
-            jarray = new JSONArray(br.readLine());
+            String arrString = br.readLine();
+            if(arrString != null) {
+                jarray = new JSONArray(arrString);
+            }
+            else {
+                jarray = new JSONArray("[]");
+            }
         }
         catch(FileNotFoundException e) {
             e.printStackTrace();
@@ -168,5 +174,23 @@ public class DataHandler {
         for(JSONObject o : teamList) {
             Log.v("minto", o.toString());
         }
+    }
+
+    public static void clearTeams() {
+        File file = new File(MainActivity.c.getFilesDir(), "teams.json");
+        Writer output;
+
+        try {
+            output = new BufferedWriter(new FileWriter(file));
+            output.write("");
+            output.close();
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

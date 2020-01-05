@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,7 +26,8 @@ public class TeamInfoFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    TextView textView;
+
+    TextView teamText, teleopText, autoText, hatchText, cargoText;
 
     // TODO: Rename and change types of parameters
     private SQLiteCursor cursor;
@@ -43,7 +46,7 @@ public class TeamInfoFragment extends Fragment {
      * @return A new instance of fragment TeamInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TeamInfoFragment newInstance(SQLiteCursor cursor) {
+    public static TeamInfoFragment newInstance(JSONObject team) {
         TeamInfoFragment fragment = new TeamInfoFragment();
         Bundle args = new Bundle();
         //args.putSerializable("team", team);// TODODODODOD ADD TEAM AS PARAM
@@ -57,22 +60,24 @@ public class TeamInfoFragment extends Fragment {
         if (getArguments() != null) {
           // mTeam = (FRC2018Team) getArguments().getSerializable("team");
         }
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        textView = getView().findViewById(R.id.testText);
-        textView.setText(cursor.getInt(0));
-        return inflater.inflate(R.layout.fragment_team_info, container, false);
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_team_info, container, false);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        teamText = view.findViewById(R.id.numTextView);
+
+        teleopText = view.findViewById(R.id.teleopText);
+        autoText = view.findViewById(R.id.autoText);
+        hatchText = view.findViewById(R.id.hatchText);
+        cargoText = view.findViewById(R.id.cargoText);
+
+        teamText.setText("yee");
+
+        // Inflate the layout for this fragment
+        return view;
     }
 
     @Override
@@ -107,7 +112,4 @@ public class TeamInfoFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void setThing(SQLiteCursor c) {
-         cursor = c;
-    }
 }

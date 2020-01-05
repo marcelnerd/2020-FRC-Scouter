@@ -34,7 +34,7 @@ import java.io.Writer;
 
 import static com.example.a2020frcscouter.TBAHandler.helper;
 
-public class MainActivity extends FragmentActivity implements ListFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener {
+public class MainActivity extends FragmentActivity implements TeamInfoFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener {
     public static Context c; // Static context that can be accessed from other classes
     private static int currentMatch = 1;
     //public com.example.cameron.sql_testing.DatabaseContainer container = new DatabaseContainer(this);
@@ -45,7 +45,6 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
     public static String TBAKey;
     public static Spinner sortSpinner;
     public static ArrayAdapter<CharSequence> selectionAdapter;
-    public static ArrayAdapter<JSONObject> listAdapter;
     public static RequestQueue queue;
 
 
@@ -119,6 +118,8 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DataHandler.clearTeams();
+
                 for (int i = 1; i < 82; i++) {
                     handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019caoc", i));
                 }
@@ -139,58 +140,60 @@ public class MainActivity extends FragmentActivity implements ListFragment.OnFra
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                FrodoCursorAdapter todoAdapter;
-                FragmentManager manager = getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
+                GolumnListAdapter boboAdapter;
                 switch(position) {
                     case 0:
-                        //handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2018mndu", currentMatch));
-                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
-                        MainActivity.list.setAdapter(todoAdapter);
+                        boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teleopPoints");
+                        MainActivity.list.setAdapter(boboAdapter);
+
                         //transaction.replace(R.id.listFrameLayout, new ListFragment());
                         //transaction.commit();
                         break;
                     case 1:
-                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesAutoCursor(), "auto");
-                        MainActivity.list.setAdapter(todoAdapter);
+                        boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "autoPoints");
+                        MainActivity.list.setAdapter(boboAdapter);
                         break;
                     case 2:
-                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesHatchCursor(), "hatch");
-                        MainActivity.list.setAdapter(todoAdapter);
+                        boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "hatchPanelPoints");
+                        MainActivity.list.setAdapter(boboAdapter);
                         break;
                     case 3:
-                        todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesCargoCursor(), "cargo");
-                        MainActivity.list.setAdapter(todoAdapter);
+                        boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "cargoPoints");
+                        MainActivity.list.setAdapter(boboAdapter);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeamCursor(), "team");
-                MainActivity.list.setAdapter(todoAdapter);
+                GolumnListAdapter boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teamNum");
+                MainActivity.list.setAdapter(boboAdapter);
             }
         });
 
         MainActivity.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //(new MainActivity()).startTeamInfoFragment((SQLiteCursor) parent.getItemAtPosition(position));
-                SQLiteCursor cursor = (SQLiteCursor) parent.getItemAtPosition(position);
-                Intent intent = new Intent(MainActivity.c, TeamInfoActivity.class);
+//                SQLiteCursor cursor = (SQLiteCursor) parent.getItemAtPosition(position);
+//                Intent intent = new Intent(MainActivity.c, TeamInfoActivity.class);
+//
+//                intent.putExtra("teamNum", Integer.toString(cursor.getInt(0)));
+//                intent.putExtra("teleop", Float.toString(cursor.getFloat(1)));
+//                intent.putExtra("cargoPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("cargoPoints"))));
+//                intent.putExtra("hatchPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("hatchPoints"))));
+//                intent.putExtra("autoPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("autoPoints"))));
+//                startActivity(intent);
 
-                intent.putExtra("teamNum", Integer.toString(cursor.getInt(0)));
-                intent.putExtra("teleop", Float.toString(cursor.getFloat(1)));
-                intent.putExtra("cargoPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("cargoPoints"))));
-                intent.putExtra("hatchPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("hatchPoints"))));
-                intent.putExtra("autoPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("autoPoints"))));
-                startActivity(intent);
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.add(R.id.mainLayout, new TeamInfoFragment(), "teamInfoFraggy");
+                transaction.commit();
 
             }
         });
 
-        for (int i = 1; i < 82; i++) {
-            handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019caoc", i));
-        }
+//        for (int i = 1; i < 82; i++) {
+//            handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019caoc", i));
+//        }
 
         /*FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
         MainActivity.list.setAdapter(todoAdapter);*/
