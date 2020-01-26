@@ -2,6 +2,7 @@ package com.example.a2020frcscouter;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteCursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -66,6 +67,7 @@ public class TeamInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_info, container, false);
+        //view.setBackgroundColor(Color.WHITE);
 
         teamText = view.findViewById(R.id.numTextView);
 
