@@ -23,7 +23,7 @@ public class TBAHandler {
 
 
     public TBAHandler(Context context) {
-        helper = new DBHelper(MainActivity.c);
+        helper = new DBHelper(MyAppy.getAppContext());
         //queue = Volley.newRequestQueue(context);
         //queue.start();
     }

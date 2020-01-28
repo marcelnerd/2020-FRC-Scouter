@@ -83,8 +83,6 @@ public class TeamListFragment extends Fragment {
 
         selectionAdapter = ArrayAdapter.createFromResource(MyAppy.getAppContext(), R.array.sort_array, android.R.layout.simple_spinner_item);
         selectionAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-
-        ///////////
     }
 
     @Override
@@ -106,33 +104,16 @@ public class TeamListFragment extends Fragment {
                     handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019caoc", i));
                 }
 
+                list.setAdapter(getSelectedAdapter(sortSpinner.getSelectedItemPosition()));
+
                 DataHandler.printTeamsList();
-//                FrodoCursorAdapter todoAdapter = new FrodoCursorAdapter(MainActivity.c, helper.getAllEntriesTeleopCursor(), "teleop");
-//                MainActivity.list.setAdapter(todoAdapter);
             }
         });
 
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                GolumnListAdapter boboAdapter;
-                switch(position) {
-                    case 0:
-                        boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teleopPoints");
-                        list.setAdapter(boboAdapter);
-                        break;
-                    case 1:
-                        boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "autoPoints");
-                        list.setAdapter(boboAdapter);
-                        break;
-                    case 2:
-                        boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "hatchPanelPoints");
-                        list.setAdapter(boboAdapter);
-                        break;
-                    case 3:
-                        boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "cargoPoints");
-                        list.setAdapter(boboAdapter);
-                }
+                list.setAdapter(getSelectedAdapter(position));
             }
 
             @Override
@@ -145,15 +126,6 @@ public class TeamListFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                SQLiteCursor cursor = (SQLiteCursor) parent.getItemAtPosition(position);
-//                Intent intent = new Intent(MainActivity.c, TeamInfoActivity.class);
-//
-//                intent.putExtra("teamNum", Integer.toString(cursor.getInt(0)));
-//                intent.putExtra("teleop", Float.toString(cursor.getFloat(1)));
-//                intent.putExtra("cargoPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("cargoPoints"))));
-//                intent.putExtra("hatchPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("hatchPoints"))));
-//                intent.putExtra("autoPoints", Float.toString(cursor.getFloat(cursor.getColumnIndex("autoPoints"))));
-//                startActivity(intent);
 
                 for (Fragment fragment : getFragmentManager().getFragments()) {
                     getFragmentManager().beginTransaction().remove(fragment).commit();
@@ -206,5 +178,23 @@ public class TeamListFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private GolumnListAdapter getSelectedAdapter(int position) {
+        GolumnListAdapter boboAdapter = null;
+        switch(position) {
+            case 0:
+                boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teleopPoints");
+                break;
+            case 1:
+                boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "autoPoints");
+                break;
+            case 2:
+                boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "hatchPanelPoints");
+                break;
+            case 3:
+                boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "cargoPoints");
+        }
+        return boboAdapter;
     }
 }

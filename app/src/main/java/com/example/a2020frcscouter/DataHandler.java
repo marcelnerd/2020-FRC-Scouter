@@ -95,7 +95,7 @@ public class DataHandler {
 
     private static ArrayList<JSONObject> readTeamFile() throws JSONException {
         //I think this is done
-        File file = new File(MainActivity.c.getFilesDir(), "teams.json");
+        File file = new File(MyAppy.getAppContext().getFilesDir(), "teams.json");
         ArrayList<JSONObject> list = new ArrayList<>();
         BufferedReader br;
         JSONArray jarray = null;
@@ -144,7 +144,7 @@ public class DataHandler {
 //    }
 
     private static void writeTeamFile() {
-        File file = new File(MainActivity.c.getFilesDir(), "teams.json");
+        File file = new File(MyAppy.getAppContext().getFilesDir(), "teams.json");
         Writer output;
 
         JSONArray list = new JSONArray(); // List of all teams in the file
@@ -177,7 +177,7 @@ public class DataHandler {
     }
 
     public static void clearTeams() {
-        File file = new File(MainActivity.c.getFilesDir(), "teams.json");
+        File file = new File(MyAppy.getAppContext().getFilesDir(), "teams.json");
         Writer output;
 
         try {
