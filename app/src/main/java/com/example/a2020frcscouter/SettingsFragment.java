@@ -1,15 +1,12 @@
 package com.example.a2020frcscouter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
 
 /**
@@ -31,10 +28,6 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
-    EditText keyText;
-    Button applyButton;
-    SharedPreferences.Editor editor;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -65,24 +58,6 @@ public class SettingsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        editor = MainActivity.sharedPref.edit();
-        keyText = getActivity().findViewById(R.id.tbaKeyText);
-        applyButton = getActivity().findViewById(R.id.thingButton);
-
-        applyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editor.putString(getString(R.string.settings_key_key), keyText.getText().toString());
-                editor.apply();
-            }
-        });
-
-        if(!MainActivity.sharedPref.getString(getString(R.string.settings_key_key), "yeet").equals("yeet")) {
-            keyText.setText(MainActivity.sharedPref.getString(getString(R.string.settings_key_key), "yeet"));
-        }
-
-        editor.putString(getString(R.string.settings_key_key), "YXwa7Fm6N0mks7XhnRMIVnJzsjE3frXe30GZAMp5r3rDmhdLFcZjsFkFTpxxRUtR");
     }
 
     @Override

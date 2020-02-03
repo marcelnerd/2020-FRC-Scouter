@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-//import static com.example.cameron.sql_testing.JSONHandler.getMatchData;
+//import static com.example.cameron.sql_testing.JSONHandler2019.getMatchData;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -25,7 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public final static String SQL_TABLE_NAME = "teams";
     public static String nextMatch;
     private Context context;
-    private JSONHandler updater;
+    private JSONHandler2019 updater;
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "ScoutDat.db";

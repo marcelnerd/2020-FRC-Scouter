@@ -2,13 +2,10 @@ package com.example.a2020frcscouter;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteCursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -18,38 +15,19 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Spinner;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONObject;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
-
-import static com.example.a2020frcscouter.TBAHandler.helper;
-
 public class MainActivity extends FragmentActivity implements TeamInfoFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener, TeamListFragment.OnFragmentInteractionListener {
-    private static int currentMatch = 1;
     public static SharedPreferences sharedPref;
     public static String TBAKey;
 
     public BottomNavigationView mainBottomNav;
     public static RequestQueue queue;
-
-    public static int getCurrentMatch() {
-        return currentMatch;
-    }
-
-    public static void setCurrentMatch(int m) {
-        currentMatch = m;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +42,8 @@ public class MainActivity extends FragmentActivity implements TeamInfoFragment.O
         TBAKey = sharedPref.getString(getString(R.string.settings_key_key), "yeet");
         queue = Volley.newRequestQueue(this);
         queue.start();
+
+        TBAHandler.requestMatchKeys();
 
         mainBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

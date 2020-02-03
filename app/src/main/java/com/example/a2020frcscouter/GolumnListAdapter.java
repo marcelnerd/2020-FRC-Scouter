@@ -12,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GolumnListAdapter extends ArrayAdapter<JSONObject> {
     String sortOption;
@@ -45,7 +44,7 @@ public class GolumnListAdapter extends ArrayAdapter<JSONObject> {
 
             teamNumText.setText(team.getString("teamNum"));
 
-            for(String s : DataHandler.scoreKeys) {
+            for(String s : DataHandler.scoreKeys2019) {
                 if(sortOption.equals(s)) {
                     statList = team.getJSONArray(s);
                     for(int i = 0; i < statList.length(); i++) {

@@ -39,7 +39,6 @@ public class TeamListFragment extends Fragment {
     private String mParam2;
 
     Button button;
-    static TBAHandler handler;
     static ListView list;
     public static String TBAKey;
     public static Spinner sortSpinner;
@@ -77,10 +76,6 @@ public class TeamListFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        handler = new TBAHandler(MyAppy.getAppContext());
-
-        handler.helper.onUpgrade(handler.helper.getWritableDatabase(), 0, 4);
-
         selectionAdapter = ArrayAdapter.createFromResource(MyAppy.getAppContext(), R.array.sort_array, android.R.layout.simple_spinner_item);
         selectionAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
     }
@@ -100,11 +95,7 @@ public class TeamListFragment extends Fragment {
             public void onClick(View view) {
                 DataHandler.clearTeams();
 
-                for (int i = 1; i < 82; i++) {
-                    handler.getMatchData(String.format("/match/%1$s_qm%2$d", "2019caoc", i));
-                }
-
-                list.setAdapter(getSelectedAdapter(sortSpinner.getSelectedItemPosition()));
+                TBAHandler.requestMatchKeys();
 
                 DataHandler.printTeamsList();
             }
@@ -126,7 +117,6 @@ public class TeamListFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 for (Fragment fragment : getFragmentManager().getFragments()) {
                     getFragmentManager().beginTransaction().remove(fragment).commit();
                 }
@@ -157,6 +147,7 @@ public class TeamListFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
     }
 
     @Override
@@ -180,7 +171,7 @@ public class TeamListFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private GolumnListAdapter getSelectedAdapter(int position) {
+    public static GolumnListAdapter getSelectedAdapter(int position) {
         GolumnListAdapter boboAdapter = null;
         switch(position) {
             case 0:
@@ -196,5 +187,9 @@ public class TeamListFragment extends Fragment {
                 boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "cargoPoints");
         }
         return boboAdapter;
+    }
+
+    public void refreshList() {
+
     }
 }
