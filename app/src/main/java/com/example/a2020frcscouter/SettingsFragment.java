@@ -7,6 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.lang.reflect.Array;
 
 
 /**
@@ -28,6 +34,11 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private Spinner eventSpinner;
+    private ArrayAdapter<String> eventAdapter;
+
+    private boolean lmaoProgramming;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -58,20 +69,42 @@ public class SettingsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        lmaoProgramming = false;
+
+        eventAdapter = new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        eventSpinner = view.findViewById(R.id.eventSpinner);
+
+        eventSpinner.setAdapter(eventAdapter);
+
+        eventSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(lmaoProgramming) {
+                    TBAHandler.setCurrentEvent((String) ((TextView) view).getText());
+                }
+                else {
+                    eventSpinner.setAdapter(new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames()));
+                    parent.setSelection(TBAHandler.getCurrentEventIndex());
+                    lmaoProgramming = true;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                eventSpinner.setAdapter(new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames()));
+                parent.setSelection(TBAHandler.getCurrentEventIndex());
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -104,5 +137,9 @@ public class SettingsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void setSettings() {
+
     }
 }

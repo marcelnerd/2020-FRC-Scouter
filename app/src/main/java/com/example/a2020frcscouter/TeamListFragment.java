@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,11 +39,12 @@ public class TeamListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Button button;
     static ListView list;
     public static String TBAKey;
     public static Spinner sortSpinner;
     public static ArrayAdapter<CharSequence> selectionAdapter;
+
+    SwipeRefreshLayout refreshLayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -85,19 +87,23 @@ public class TeamListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_team_list, container, false);
         view.setBackgroundColor(Color.WHITE);
 
-        button = view.findViewById(R.id.button);
+        refreshLayout = view.findViewById(R.id.refreshLayout);
         list = view.findViewById(R.id.listMain);
         sortSpinner = view.findViewById(R.id.sortSpinner);
         sortSpinner.setAdapter(selectionAdapter);
 
-        button.setOnClickListener(new Button.OnClickListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onClick(View view) {
-                DataHandler.clearTeams();
+            public void onRefresh() {
+                //DataHandler.clearTeams();
 
                 TBAHandler.requestMatchKeys();
 
-                DataHandler.printTeamsList();
+                //DataHandler.printTeamsList();
+
+                list.setAdapter(getSelectedAdapter(sortSpinner.getSelectedItemPosition()));
+
+                refreshLayout.setRefreshing(false);
             }
         });
 
@@ -109,8 +115,8 @@ public class TeamListFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                GolumnListAdapter boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teamNum");
-                list.setAdapter(boboAdapter);
+                TBAHandler.requestMatchKeys();
+                list.setAdapter(new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teamNum"));
             }
         });
 
@@ -132,11 +138,6 @@ public class TeamListFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -187,9 +188,5 @@ public class TeamListFragment extends Fragment {
                 boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "cargoPoints");
         }
         return boboAdapter;
-    }
-
-    public void refreshList() {
-
     }
 }

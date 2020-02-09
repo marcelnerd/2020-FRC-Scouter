@@ -1,7 +1,5 @@
 package com.example.a2020frcscouter;
 
-import android.content.Context;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 
@@ -14,24 +12,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TBAHandler {
 
     private static ArrayList<String> matchKeys = new ArrayList<>();
+    private static HashMap eventKeys = new HashMap();
+    private static ArrayList<String> eventNames = new ArrayList<>();
     public static int matchCounter = 1;
     private static final String baseURL = "https://www.thebluealliance.com/api/v3";
     private static final String eventKey = "2019caoc"; //TODO DON'T FORGET TO CHANGE THIS BACK
-    private static String currentEventKey = "2019caoc";
+    private static String currentEventName;
+    private static String currentEventKey;
     private static final int currentYear = 2019;
     public static JSONObject json;
 
 
-    public TBAHandler(Context context) {
+    public TBAHandler() {
 
     }
 
     public static void getMatchData(String matchKey) {
-        TBAMatchListener listener = new TBAMatchListener(); // The helper is passed to the listner.
+        TBAMatchListener listener = new TBAMatchListener();
 
         ////VERY IMPORTANT//// Do not remove or everything will break probably
         TBAMatchListener.yeet();
@@ -57,7 +59,7 @@ public class TBAHandler {
         String fullURL = baseURL + "/event/" + currentEventKey + "/matches/keys";
 
 
-        TBAMatchKeysJSONRequest request = new TBAMatchKeysJSONRequest(Request.Method.GET, fullURL, null, listener, new Response.ErrorListener() {
+        TBAKeysJSONRequest request = new TBAKeysJSONRequest(Request.Method.GET, fullURL, null, listener, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("minto", "Json Request encountered error");
@@ -67,12 +69,13 @@ public class TBAHandler {
 
         });
 
-        Log.d("minto", "happeneed");
+        Log.d("minto", fullURL);
         MainActivity.queue.add(request);
 
     }
 
     public static void setMatchKeys(JSONArray keyArray) {
+        DataHandler.clearTeams();
         matchKeys.clear();
 
         try {
@@ -96,28 +99,54 @@ public class TBAHandler {
         }
     }
 
-    public static int getMatchCounter() {
-        return matchCounter;
+    public static void setEventKeys(JSONArray eventArray) {
+        try {
+            JSONObject tempO;
+            for (int i = 0; i < eventArray.length(); i++) {
+                tempO = eventArray.getJSONObject(i);
+                eventKeys.put(tempO.getString("name"), tempO.get("key"));
+            }
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.v("minto", eventKeys.toString());
+
+        eventNames.clear();
+        for(Object name : eventKeys.keySet()) {
+            eventNames.add(name.toString());
+        }
     }
 
-    public void setCurrentEventKey(String key) {
-        currentEventKey = key;
+    public static void setCurrentEvent(String name) {
+        currentEventName = name;
+        currentEventKey = (String) eventKeys.get(name);
+        Log.d("minto", "Current event: " + currentEventName + "     " + currentEventKey);
+    }
+
+    public static int getCurrentEventIndex() {
+        return eventNames.indexOf(currentEventName);
+    }
+
+    public static String getCurrentEventName() {
+        return currentEventName;
+    }
+
+    public static ArrayList<String> getEventNames() {
+        return eventNames;
+    }
+
+    public static int getMatchCounter() {
+        return matchCounter;
     }
 
     public static ArrayList<String> getMatchKeys() {
         return matchKeys;
     }
 
-    public static String getMatch(int matchNum) {
-        return String.format("/match/%1$s_qm%2$d", eventKey, matchNum);
-    }
-
-    public static String getTeamStatus(int teamNumber) {
-        return String.format("/team/frc%1$d/events/%2$d/statuses", teamNumber, currentYear);
-    }
-
-    public static String getTeamMatches(int teamNumber) {
-        return String.format("/team/frc%1$d/event/%2$s/matches", teamNumber, eventKey);
+    public static HashMap getEventKeys() {
+        return eventKeys;
     }
 
 }

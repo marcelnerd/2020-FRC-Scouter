@@ -43,6 +43,18 @@ public class MainActivity extends FragmentActivity implements TeamInfoFragment.O
         queue = Volley.newRequestQueue(this);
         queue.start();
 
+        TBAKeysJSONRequest request = new TBAKeysJSONRequest(Request.Method.GET, "https://www.thebluealliance.com/api/v3/events/2019/simple", null, new TBAEventKeysListener(), new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("minto", "Json Request encountered error");
+                error.printStackTrace();
+                Log.v("minto", error.getMessage() + "");
+            }
+
+        });
+
+        queue.add(request);
+
         TBAHandler.requestMatchKeys();
 
         mainBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -62,6 +74,8 @@ public class MainActivity extends FragmentActivity implements TeamInfoFragment.O
                         break;
 
                     case "Settings":
+                        transaction.add(R.id.mainLayout, new SettingsFragment(), "settingsFraggy");
+                        transaction.commit();
                 }
                 return false;
             }

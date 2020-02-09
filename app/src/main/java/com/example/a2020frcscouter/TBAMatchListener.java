@@ -37,13 +37,13 @@ public class TBAMatchListener implements Response.Listener<JSONObject> {
 //            //fuck you
 //        }
 
-        Log.d("minto", "kfdfjdfk        " + response.toString());
+        //Log.d("minto", "Matches:      " + response.toString());
 
         DataHandler.update(response);
 
         if(TBAHandler.getMatchCounter() == TBAHandler.getMatchKeys().size()) {
             TeamListFragment.list.setAdapter(TeamListFragment.getSelectedAdapter(TeamListFragment.sortSpinner.getSelectedItemPosition()));
-            Log.d("minto", TBAHandler.getMatchCounter() + "     " + TBAHandler.getMatchKeys().size());
+            //Log.d("minto", TBAHandler.getMatchCounter() + "     " + TBAHandler.getMatchKeys().size());
             TBAHandler.setMatchCounter(1);
         }
         else {

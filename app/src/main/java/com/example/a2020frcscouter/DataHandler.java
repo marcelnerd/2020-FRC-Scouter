@@ -231,6 +231,47 @@ public class DataHandler {
         }
     }
 
+    public static void writeSettingsFile() {
+        File file = new File(MyAppy.getAppContext().getFilesDir(), "settings.json");
+        Writer output;
+
+        JSONObject json = new JSONObject();
+
+        try {
+            output = new BufferedWriter(new FileWriter(file));
+            json.put("currentEventName", TBAHandler.getCurrentEventName());
+
+            output.write(json.toString());
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static HashMap getSettings() {
+        HashMap settings = new HashMap();
+        File file = new File(MyAppy.getAppContext().getFilesDir(), "teams.json");
+        BufferedReader br;
+        JSONObject json = null;
+
+        try {
+            br = new BufferedReader(new FileReader(file));
+            json = new JSONObject(br.readLine());
+
+            settings.put("currentEventName", json.get("currentEventName"));
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
+        return settings;
+    }
+
     private static void writeMatchFile() {
         //TODO complete writeMatchFile function
         //Same thing as writeTeamFile function????????
