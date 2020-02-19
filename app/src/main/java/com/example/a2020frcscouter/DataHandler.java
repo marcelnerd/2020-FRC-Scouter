@@ -2,6 +2,8 @@ package com.example.a2020frcscouter;
 
 import android.util.Log;
 
+import com.android.volley.toolbox.JsonObjectRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +26,7 @@ public class DataHandler {
             "autoPoints", "autoCellPoints", "controlPanelPoints", "endgamePoints", "teleopPoints", "totalPoints"};
     public final static String[] uniqueJsonKeys = {};
 
-    public static ArrayList<JSONObject> teamList = new ArrayList<>();
+    public static ArrayList<TeamJSONObject> teamList = new ArrayList<>();
     public static ArrayList<JSONObject> matchList = new ArrayList<>();
 
     public static HashMap<String, Object>[] getMatchData(JSONObject matchJSON) { //returns an array of hashmaps, each of which represents a team
@@ -124,7 +126,7 @@ public class DataHandler {
 
     private static void insertTeamData(HashMap<String, Object> team) { // Inserts the new team data from a match into the accumulated data for the team.
         //I think it's done. Not positive
-        JSONObject temp;
+        TeamJSONObject temp;
 
         for(int i = 0; i < teamList.size(); i++) {
             try {
@@ -144,7 +146,7 @@ public class DataHandler {
         }
 
         //If the code reaches this point, there is not an entry for the team, and one must be created
-        JSONObject newTeam = new JSONObject();
+        TeamJSONObject newTeam = new TeamJSONObject();
         try {
             newTeam.put("teamNum",  Integer.parseInt(team.get("teamNum").toString()));
             teamList.add(newTeam);
@@ -156,10 +158,10 @@ public class DataHandler {
         insertTeamData(team);
     }
 
-    private static ArrayList<JSONObject> readTeamFile() throws JSONException {
+    private static ArrayList<TeamJSONObject> readTeamFile() throws JSONException {
         //I think this is done
         File file = new File(MyAppy.getAppContext().getFilesDir(), "teams.json");
-        ArrayList<JSONObject> list = new ArrayList<>();
+        ArrayList<TeamJSONObject> list = new ArrayList<>();
         BufferedReader br;
         JSONArray jarray = null;
 
@@ -196,7 +198,7 @@ public class DataHandler {
 
 
         for(int i = 0; i < jarray.length(); i++) {
-            list.add((JSONObject) jarray.get(i));
+            list.add(new TeamJSONObject(jarray.get(i).toString()));
         }
 
         return list;
@@ -212,7 +214,7 @@ public class DataHandler {
 
         JSONArray list = new JSONArray(); // List of all teams in the file
 
-        for(JSONObject t : teamList) {
+        for(TeamJSONObject t : teamList) {
             list.put(t);
         }
 
@@ -296,6 +298,21 @@ public class DataHandler {
             e.printStackTrace();
         }
 
+    }
+
+    public static double getScoreAverage(JSONArray arr) {
+        double average = 0;
+
+        try {
+            for (int i = 0; i < arr.length(); i++) {
+                average += (int) arr.get(i);
+            }
+            average /= arr.length();
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
+        return average;
     }
 
 //    public ArrayList<String> getAllEventKeys() {

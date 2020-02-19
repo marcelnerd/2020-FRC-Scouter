@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,12 +98,14 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         list = view.findViewById(R.id.listMain);
         sortSpinner = view.findViewById(R.id.sortSpinner);
         sortSpinner.setAdapter(selectionAdapter);
-        layoutManager = new LinearLayoutManager(MyAppy.getAppContext());
-        recMain.setLayoutManager(layoutManager);
 
+        layoutManager = new LinearLayoutManager(MyAppy.getAppContext());
+
+        //((SimpleItemAnimator) recMain.getItemAnimator()).setSupportsChangeAnimations(false);
+
+        recMain.setLayoutManager(layoutManager);
         mAdapter = new GolumnRecyleAdapter("teleopPoints", this);
         recMain.setAdapter(mAdapter);
-
         recMain.setHasFixedSize(true);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -31,9 +32,19 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
     }
 
     @Override
-    public void onBindViewHolder(GolumnViewHolder holder, int position) {
-        holder.bind(DataHandler.teamList.get(position), dankListener);
+    public void onBindViewHolder(GolumnViewHolder holder, final int position) {
+        final TeamJSONObject team = DataHandler.teamList.get(position);
+        holder.bind(team, dankListener);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                //listener.onDank(team);
+
+                boolean expanded = team.getExpanded();
+                team.setExpanded(!expanded);
+                notifyItemChanged(position);
+            }
+        });
     }
 
     @Override
@@ -46,30 +57,41 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
 
 
     public static class GolumnViewHolder extends RecyclerView.ViewHolder {
-        TextView teamNum;
-        TextView teamStat;
-        TextView blinkText;
+        TextView teamNum, teamStat, teleopText, autoText;
+        LinearLayout hiddenLayout;
         String sortOption;
 
         public GolumnViewHolder(View itemView, String s) {
             super(itemView);
             teamNum = itemView.findViewById(R.id.TeamNumText);
             teamStat = itemView.findViewById(R.id.statText);
-            blinkText = itemView.findViewById(R.id.blinkTest);
+            teleopText = itemView.findViewById(R.id.teleopSubText);
+            autoText = itemView.findViewById(R.id.autoSubText);
+            hiddenLayout = itemView.findViewById(R.id.hiddenTeamEntry);
+
             sortOption = s;
 
-            blinkText.setVisibility(View.GONE);
+            hiddenLayout.setVisibility(View.GONE);
+
         }
 
-        public void bind(final JSONObject team, final OnDankListener listener) {
+        public void bind(final TeamJSONObject team, final OnDankListener listener) {
             JSONArray statList;
             double average = 0;
             int num = -1;
+            JSONArray teleopNums = null, autoNums = null;
+
+            boolean expanded = team.getExpanded();
+            hiddenLayout.setVisibility(expanded ? View.VISIBLE : View.GONE);
+
             try {
                 num = team.getInt("teamNum");
+                teleopNums = team.getJSONArray("teleopPoints");
+                autoNums = team.getJSONArray("autoPoints");
+
                 for(String s : DataHandler.genericJsonKeys) {
                     if(sortOption.equals(s)) {
-                       // Log.d("minto", "proc");
+                        Log.d("minto", s);
                         statList = team.getJSONArray(s);
                         for(int i = 0; i < statList.length(); i++) {
                             average += statList.getInt(i);
@@ -81,18 +103,14 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
             }
             catch(JSONException e) {
                 e.printStackTrace();
+                Log.d("minto", "big yikers");
             }
 
             //Log.d("minto", "average: " + Double.toString(average));
             teamNum.setText(Integer.toString(num));
             teamStat.setText(Double.toString(average));
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    //listener.onDank(team);
-                    blinkText.setVisibility(View.VISIBLE);
-                }
-            });
+            teleopText.setText("Teleop\t\t\n" + Double.toString(Math.round(DataHandler.getScoreAverage(teleopNums))));
+            autoText.setText("Autonomous\t\t\n" + Double.toString(Math.round(DataHandler.getScoreAverage(autoNums))));
         }
     }
 }

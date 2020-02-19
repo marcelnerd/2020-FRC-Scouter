@@ -19,7 +19,7 @@ public class TBAMatchKeysListener implements Response.Listener<JSONArray> {
 
     @Override
     public void onResponse(JSONArray response) { //The response represents a single match
-        Log.d("minto", "Match Keys:     " + response.toString());
+      // Log.d("minto", "Match Keys:     " + response.toString());
         TBAHandler.setMatchKeys(response);
     }
 }

@@ -13,11 +13,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class GolumnListAdapter extends ArrayAdapter<JSONObject> {
+public class GolumnListAdapter extends ArrayAdapter<TeamJSONObject> {
     String sortOption;
-    ArrayList<JSONObject> list;
+    ArrayList<TeamJSONObject> list;
 
-    public GolumnListAdapter(Context context, int resource, ArrayList<JSONObject> l, String s) {
+    public GolumnListAdapter(Context context, int resource, ArrayList<TeamJSONObject> l, String s) {
         super(context, resource, l);
         sortOption = s;
         list = l;

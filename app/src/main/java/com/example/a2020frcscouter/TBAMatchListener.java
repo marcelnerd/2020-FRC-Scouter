@@ -37,7 +37,7 @@ public class TBAMatchListener implements Response.Listener<JSONObject> {
 //            //fuck you
 //        }
 
-        Log.d("minto", "Matches:      " + response.toString());
+       // Log.d("minto", "Matches:      " + response.toString());
 
         DataHandler.update(response);
 
