@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class TBAHandler {
@@ -117,6 +118,8 @@ public class TBAHandler {
         for(Object name : eventKeys.keySet()) {
             eventNames.add(name.toString());
         }
+
+        Collections.sort(eventNames);
     }
 
     public static void setCurrentEvent(String name) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import java.lang.reflect.Array;
 
@@ -73,6 +78,18 @@ public class SettingsFragment extends Fragment {
         lmaoProgramming = false;
 
         eventAdapter = new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames());
+
+        TBAKeysJSONRequest request = new TBAKeysJSONRequest(Request.Method.GET, "https://www.thebluealliance.com/api/v3/events/2020/simple", null, new TBAEventKeysListener(), new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("minto", "Json Request encountered error");
+                error.printStackTrace();
+                Log.v("minto", error.getMessage() + "");
+            }
+
+        });
+
+        MainActivity.queue.add(request);
     }
 
     @Override

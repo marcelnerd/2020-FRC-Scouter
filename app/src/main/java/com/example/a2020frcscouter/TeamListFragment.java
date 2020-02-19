@@ -1,7 +1,6 @@
 package com.example.a2020frcscouter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,16 +8,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.android.volley.RequestQueue;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -29,7 +30,7 @@ import com.android.volley.RequestQueue;
  * Use the {@link TeamListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TeamListFragment extends Fragment {
+public class TeamListFragment extends Fragment implements OnDankListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,6 +44,10 @@ public class TeamListFragment extends Fragment {
     public static String TBAKey;
     public static Spinner sortSpinner;
     public static ArrayAdapter<CharSequence> selectionAdapter;
+
+    private RecyclerView recMain;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     SwipeRefreshLayout refreshLayout;
 
@@ -87,10 +92,18 @@ public class TeamListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_team_list, container, false);
         view.setBackgroundColor(Color.WHITE);
 
+        recMain = (RecyclerView) view.findViewById(R.id.recMain);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         list = view.findViewById(R.id.listMain);
         sortSpinner = view.findViewById(R.id.sortSpinner);
         sortSpinner.setAdapter(selectionAdapter);
+        layoutManager = new LinearLayoutManager(MyAppy.getAppContext());
+        recMain.setLayoutManager(layoutManager);
+
+        mAdapter = new GolumnRecyleAdapter("teleopPoints", this);
+        recMain.setAdapter(mAdapter);
+
+        recMain.setHasFixedSize(true);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -101,7 +114,8 @@ public class TeamListFragment extends Fragment {
 
                 //DataHandler.printTeamsList();
 
-                list.setAdapter(getSelectedAdapter(sortSpinner.getSelectedItemPosition()));
+                //list.setAdapter(getSelectedAdapter(sortSpinner.getSelectedItemPosition()));
+                recMain.setAdapter(mAdapter);
 
                 refreshLayout.setRefreshing(false);
             }
@@ -127,12 +141,15 @@ public class TeamListFragment extends Fragment {
                     getFragmentManager().beginTransaction().remove(fragment).commit();
                 }
 
+
                 FragmentManager manager = getFragmentManager(); // Might break
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.add(R.id.mainLayout, new TeamInfoFragment(), "teamInfoFraggy");
+                transaction.add(R.id.mainLayout, new TeamInfoFragment2019(), "teamInfoFraggy");
                 transaction.commit();
             }
         });
+
+
 
         return view;
     }
@@ -188,5 +205,28 @@ public class TeamListFragment extends Fragment {
                 boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "cargoPoints");
         }
         return boboAdapter;
+    }
+
+    @Override
+    public void onDank(JSONObject teamObject) {
+        TeamInfoFragment frag = new TeamInfoFragment();
+        Bundle bundle = new Bundle();
+
+        for (Fragment fragment : getFragmentManager().getFragments()) {
+            getFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+        try {
+            bundle.putString("teamNum", teamObject.getString("teamNum"));
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
+
+        frag.setArguments(bundle);
+
+        FragmentManager manager = getFragmentManager(); // Might break
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.mainLayout, frag, "teamInfoFraggy");
+        transaction.commit();
     }
 }

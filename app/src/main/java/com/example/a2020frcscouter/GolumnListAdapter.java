@@ -44,7 +44,7 @@ public class GolumnListAdapter extends ArrayAdapter<JSONObject> {
 
             teamNumText.setText(team.getString("teamNum"));
 
-            for(String s : DataHandler.scoreKeys2019) {
+            for(String s : DataHandler.genericJsonKeys) {
                 if(sortOption.equals(s)) {
                     statList = team.getJSONArray(s);
                     for(int i = 0; i < statList.length(); i++) {

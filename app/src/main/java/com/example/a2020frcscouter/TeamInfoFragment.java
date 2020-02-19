@@ -2,7 +2,6 @@ package com.example.a2020frcscouter;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteCursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,9 +16,9 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TeamInfoFragment.OnFragmentInteractionListener} interface
+ * {@link TeamInfoFragment2019.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TeamInfoFragment#newInstance} factory method to
+ * Use the {@link TeamInfoFragment2019#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class TeamInfoFragment extends Fragment {
@@ -29,6 +28,7 @@ public class TeamInfoFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     TextView teamText, teleopText, autoText, hatchText, cargoText;
+    String teamNum;
 
     // TODO: Rename and change types of parameters
     private SQLiteCursor cursor;
@@ -44,11 +44,11 @@ public class TeamInfoFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      *
-     * @return A new instance of fragment TeamInfoFragment.
+     * @return A new instance of fragment TeamInfoFragment2019.
      */
     // TODO: Rename and change types and number of parameters
-    public static TeamInfoFragment newInstance(JSONObject team) {
-        TeamInfoFragment fragment = new TeamInfoFragment();
+    public static TeamInfoFragment2019 newInstance(JSONObject team) {
+        TeamInfoFragment2019 fragment = new TeamInfoFragment2019();
         Bundle args = new Bundle();
         //args.putSerializable("team", team);// TODODODODOD ADD TEAM AS PARAM
         fragment.setArguments(args);
@@ -59,15 +59,16 @@ public class TeamInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-          // mTeam = (FRC2018Team) getArguments().getSerializable("team");
+            // mTeam = (FRC2018Team) getArguments().getSerializable("team");
         }
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_team_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_team_info_2019, container, false);
         //view.setBackgroundColor(Color.WHITE);
+        teamNum = this.getArguments().getString("teamNum");
 
         teamText = view.findViewById(R.id.numTextView);
 
@@ -76,7 +77,7 @@ public class TeamInfoFragment extends Fragment {
         hatchText = view.findViewById(R.id.hatchText);
         cargoText = view.findViewById(R.id.cargoText);
 
-        teamText.setText("yee");
+        teamText.setText(teamNum);
 
         // Inflate the layout for this fragment
         return view;

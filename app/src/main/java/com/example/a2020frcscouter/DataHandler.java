@@ -19,9 +19,7 @@ import java.util.HashMap;
 
 public class DataHandler {
 
-    public final static String filepath = ""; //TODO figure out filepath
     public final static String[] scoreKeys2019 = {"teamNum", "cargoPoints", "hatchPanelPoints", "teleopPoints", "autoPoints", "habClimbPoints"}; //TODO replace these keys
-    public final static String[] scoreKeys2020 = {"teamNum"};
     public final static String[] genericJsonKeys = {"autoCellsBottom", "autoCellsOuter", "autoCellsInner", "teleopCellsBottom", "teleopCellsOuter", "teleopCellsInner",
             "autoPoints", "autoCellPoints", "controlPanelPoints", "endgamePoints", "teleopPoints", "totalPoints"};
     public final static String[] uniqueJsonKeys = {};
@@ -37,8 +35,6 @@ public class DataHandler {
             for (int x = 0; x < infoTable.length; x++) {
                 infoTable[x] = new HashMap<String, Object>();
             }
-
-            //JSONObject json = TBA.getJSON(TBA.getMatch(matchNum));
 
             // Gets the team number for each team
             JSONObject allianceJSON = matchJSON.getJSONObject("alliances");
@@ -116,7 +112,7 @@ public class DataHandler {
 
         //teams = parseTeams(matchJson);
 
-        teams = JSONHandler2019.getMatchData(matchJson); //TODO Have fun changing this
+        teams = getMatchData(matchJson); //TODO Have fun changing this
 
         for(HashMap<String, Object> t: teams) {
             insertTeamData(t);
@@ -134,8 +130,8 @@ public class DataHandler {
             try {
                 if (teamList.get(i).getInt("teamNum") == Integer.parseInt(team.get("teamNum").toString())) {
                     temp = teamList.get(i);
-                    for(int n = 1; n < scoreKeys2019.length; n++) {
-                        temp.accumulate(scoreKeys2019[n], team.get(scoreKeys2019[n]));
+                    for(int n = 1; n < genericJsonKeys.length; n++) {
+                        temp.accumulate(genericJsonKeys[n], team.get(genericJsonKeys[n]));
                     }
                     teamList.set(i, temp);
                     return;

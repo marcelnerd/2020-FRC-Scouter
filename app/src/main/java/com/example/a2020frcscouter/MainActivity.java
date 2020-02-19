@@ -3,6 +3,8 @@ package com.example.a2020frcscouter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,15 +13,11 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
 public class MainActivity extends FragmentActivity implements TeamInfoFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener, TeamListFragment.OnFragmentInteractionListener {
@@ -43,17 +41,18 @@ public class MainActivity extends FragmentActivity implements TeamInfoFragment.O
         queue = Volley.newRequestQueue(this);
         queue.start();
 
-        TBAKeysJSONRequest request = new TBAKeysJSONRequest(Request.Method.GET, "https://www.thebluealliance.com/api/v3/events/2019/simple", null, new TBAEventKeysListener(), new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("minto", "Json Request encountered error");
-                error.printStackTrace();
-                Log.v("minto", error.getMessage() + "");
-            }
+        int[] colors = new int[] {
+                Color.BLACK,
+                Color.GREEN,
+        };
 
-        });
+        int [][] states = new int [][]{
+                new int[] { android.R.attr.state_enabled, -android.R.attr.state_checked},
+                new int[] {android.R.attr.state_enabled, android.R.attr.state_checked}
+        };
 
-        queue.add(request);
+        mainBottomNav.setItemTextColor(new ColorStateList(states, colors));
+        mainBottomNav.setItemIconTintList(new ColorStateList(states, colors));
 
         TBAHandler.requestMatchKeys();
 
