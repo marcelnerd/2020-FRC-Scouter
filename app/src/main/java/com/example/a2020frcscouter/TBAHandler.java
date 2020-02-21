@@ -1,5 +1,9 @@
 package com.example.a2020frcscouter;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 
@@ -15,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class TBAHandler {
+public class TBAHandler implements OnSwankListener {
 
     private static ArrayList<String> matchKeys = new ArrayList<>();
     private static HashMap eventKeys = new HashMap();
@@ -112,9 +116,10 @@ public class TBAHandler {
             e.printStackTrace();
         }
 
-        Log.v("minto", eventKeys.toString());
+        //Log.v("minto", eventKeys.toString());
 
         eventNames.clear();
+        eventNames.add("");
         for(Object name : eventKeys.keySet()) {
             eventNames.add(name.toString());
         }
@@ -150,6 +155,10 @@ public class TBAHandler {
 
     public static HashMap getEventKeys() {
         return eventKeys;
+    }
+
+    @Override
+    public void OnSwank(TeamJSONObject team) {
     }
 
 }

@@ -2,8 +2,11 @@ package com.example.a2020frcscouter;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.FragmentManager;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -42,9 +45,12 @@ public class TBAMatchListener implements Response.Listener<JSONObject> {
         DataHandler.update(response);
 
         if(TBAHandler.getMatchCounter() == TBAHandler.getMatchKeys().size()) {
-            TeamListFragment.list.setAdapter(TeamListFragment.getSelectedAdapter(TeamListFragment.sortSpinner.getSelectedItemPosition()));
-            //Log.d("minto", TBAHandler.getMatchCounter() + "     " + TBAHandler.getMatchKeys().size());
             TBAHandler.setMatchCounter(1);
+            //TeamListFragment.list.setAdapter(TeamListFragment.getSelectedAdapter(TeamListFragment.sortSpinner.getSelectedItemPosition()));
+            TeamListFragment.recMain.setAdapter(new GolumnRecyleAdapter("teleopPoints"));
+            TeamListFragment.refreshLayout.setRefreshing(false);
+
+            //Log.d("minto", TBAHandler.getMatchCounter() + "     " + TBAHandler.getMatchKeys().size());
             DataHandler.printTeamsList();
         }
         else {

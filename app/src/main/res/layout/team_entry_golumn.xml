@@ -59,6 +59,14 @@
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:text="Win Rate" />
+
+        <Button
+            android:id="@+id/teamInfoButton"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Team Info" />
     </LinearLayout>
 
 </LinearLayout>

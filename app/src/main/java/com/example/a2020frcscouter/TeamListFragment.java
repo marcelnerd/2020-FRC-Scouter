@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -31,7 +32,7 @@ import org.json.JSONObject;
  * Use the {@link TeamListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TeamListFragment extends Fragment implements OnDankListener {
+public class TeamListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,11 +47,11 @@ public class TeamListFragment extends Fragment implements OnDankListener {
     public static Spinner sortSpinner;
     public static ArrayAdapter<CharSequence> selectionAdapter;
 
-    private RecyclerView recMain;
+    public static RecyclerView recMain;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    public static RecyclerView.LayoutManager layoutManager;
 
-    SwipeRefreshLayout refreshLayout;
+    public static SwipeRefreshLayout refreshLayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -104,7 +105,7 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         //((SimpleItemAnimator) recMain.getItemAnimator()).setSupportsChangeAnimations(false);
 
         recMain.setLayoutManager(layoutManager);
-        mAdapter = new GolumnRecyleAdapter("teleopPoints", this);
+        mAdapter = new GolumnRecyleAdapter("teleopPoints");
         recMain.setAdapter(mAdapter);
         recMain.setHasFixedSize(true);
 
@@ -120,7 +121,7 @@ public class TeamListFragment extends Fragment implements OnDankListener {
                 //list.setAdapter(getSelectedAdapter(sortSpinner.getSelectedItemPosition()));
                 recMain.setAdapter(mAdapter);
 
-                refreshLayout.setRefreshing(false);
+                //refreshLayout.setRefreshing(false);
             }
         });
 
@@ -192,6 +193,10 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         void onFragmentInteraction(Uri uri);
     }
 
+    public static void updateAdapter() {
+
+    }
+
     public static GolumnListAdapter getSelectedAdapter(int position) {
         GolumnListAdapter boboAdapter = null;
         switch(position) {
@@ -210,26 +215,26 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         return boboAdapter;
     }
 
-    @Override
-    public void onDank(JSONObject teamObject) {
-        TeamInfoFragment frag = new TeamInfoFragment();
-        Bundle bundle = new Bundle();
-
-        for (Fragment fragment : getFragmentManager().getFragments()) {
-            getFragmentManager().beginTransaction().remove(fragment).commit();
-        }
-        try {
-            bundle.putString("teamNum", teamObject.getString("teamNum"));
-        }
-        catch(JSONException e) {
-            e.printStackTrace();
-        }
-
-        frag.setArguments(bundle);
-
-        FragmentManager manager = getFragmentManager(); // Might break
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.mainLayout, frag, "teamInfoFraggy");
-        transaction.commit();
-    }
+//    @Override
+//    public void OnDank(JSONObject teamObject) {
+//        TeamInfoFragment frag = new TeamInfoFragment();
+//        Bundle bundle = new Bundle();
+//
+//        for (Fragment fragment : getFragmentManager().getFragments()) {
+//            getFragmentManager().beginTransaction().remove(fragment).commit();
+//        }
+//        try {
+//            bundle.putString("teamNum", teamObject.getString("teamNum"));
+//        }
+//        catch(JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        frag.setArguments(bundle);
+//
+//        FragmentManager manager = getFragmentManager(); // Might break
+//        FragmentTransaction transaction = manager.beginTransaction();
+//        transaction.add(R.id.mainLayout, frag, "teamInfoFraggy");
+//        transaction.commit();
+//    }
 }

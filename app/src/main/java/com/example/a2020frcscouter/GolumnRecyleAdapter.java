@@ -1,24 +1,33 @@
 package com.example.a2020frcscouter;
 
+import android.app.Activity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapter.GolumnViewHolder> {
     String sortOption;
-    OnDankListener dankListener;
 
-    public GolumnRecyleAdapter(String s, OnDankListener l) {
+    public GolumnRecyleAdapter(String s) {
         sortOption = s;
-        dankListener = l;
     }
 
     public GolumnViewHolder onCreateViewHolder(ViewGroup parent,
@@ -32,17 +41,27 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
     }
 
     @Override
-    public void onBindViewHolder(GolumnViewHolder holder, final int position) {
+    public void onBindViewHolder(GolumnViewHolder holder, int position) {
+        final int newPosition = holder.getAdapterPosition();
         final TeamJSONObject team = DataHandler.teamList.get(position);
-        holder.bind(team, dankListener);
+        holder.bind(team);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                //listener.onDank(team);
+                //listener.OnDank(team);
 
                 boolean expanded = team.getExpanded();
                 team.setExpanded(!expanded);
-                notifyItemChanged(position);
+                notifyItemChanged(newPosition);
+            }
+        });
+
+        holder.itemView.findViewById(R.id.teamInfoButton).setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyAppy.getAppContext(), TeamInfoActivity.class);
+                intent.putExtra("team json", team.toString());
+                MyAppy.getAppContext().startActivity(intent);
             }
         });
     }
@@ -60,6 +79,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
         TextView teamNum, teamStat, teleopText, autoText;
         LinearLayout hiddenLayout;
         String sortOption;
+        //Button infoButton;
 
         public GolumnViewHolder(View itemView, String s) {
             super(itemView);
@@ -68,6 +88,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
             teleopText = itemView.findViewById(R.id.teleopSubText);
             autoText = itemView.findViewById(R.id.autoSubText);
             hiddenLayout = itemView.findViewById(R.id.hiddenTeamEntry);
+            //infoButton = itemView.findViewById(R.id.teamInfoButton);
 
             sortOption = s;
 
@@ -75,7 +96,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
 
         }
 
-        public void bind(final TeamJSONObject team, final OnDankListener listener) {
+        public void bind(final TeamJSONObject team) {
             JSONArray statList;
             double average = 0;
             int num = -1;
@@ -91,7 +112,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
 
                 for(String s : DataHandler.genericJsonKeys) {
                     if(sortOption.equals(s)) {
-                        Log.d("minto", s);
+                        //Log.d("minto", s);
                         statList = team.getJSONArray(s);
                         for(int i = 0; i < statList.length(); i++) {
                             average += statList.getInt(i);

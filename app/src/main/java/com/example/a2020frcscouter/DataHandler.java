@@ -1,6 +1,7 @@
 package com.example.a2020frcscouter;
 
 import android.util.Log;
+import android.widget.Button;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 
@@ -28,6 +29,7 @@ public class DataHandler {
 
     public static ArrayList<TeamJSONObject> teamList = new ArrayList<>();
     public static ArrayList<JSONObject> matchList = new ArrayList<>();
+    public static HashMap settings = new HashMap();
 
     public static HashMap<String, Object>[] getMatchData(JSONObject matchJSON) { //returns an array of hashmaps, each of which represents a team
 
@@ -249,17 +251,22 @@ public class DataHandler {
         }
     }
 
-    public static HashMap getSettings() {
-        HashMap settings = new HashMap();
-        File file = new File(MyAppy.getAppContext().getFilesDir(), "teams.json");
+    public static void readSettingsFile() {  //TODO TODO TODO TODO Pull the data from TBA right after the event is selected, before you ever change fragments
+        File file = new File(MyAppy.getAppContext().getFilesDir(), "settings.json");
         BufferedReader br;
+        String jsonString;
         JSONObject json = null;
 
         try {
             br = new BufferedReader(new FileReader(file));
-            json = new JSONObject(br.readLine());
+            jsonString = br.readLine();
+            if(jsonString != null) {
+                json = new JSONObject(br.readLine());
+                settings.put("currentEventName", json.get("currentEventName"));
+                Log.d("minto", "read current event: " + settings.get("currentEventName").toString());
 
-            settings.put("currentEventName", json.get("currentEventName"));
+                TBAHandler.setCurrentEvent(settings.get("currentEventName").toString());
+            }
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -267,7 +274,6 @@ public class DataHandler {
         catch(JSONException e) {
             e.printStackTrace();
         }
-        return settings;
     }
 
     private static void writeMatchFile() {

@@ -1,6 +1,7 @@
 package com.example.a2020frcscouter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import java.lang.reflect.Array;
+import java.util.HashMap;
 
 
 /**
@@ -75,6 +76,8 @@ public class SettingsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        //DataHandler.readSettingsFile();
+
         lmaoProgramming = false;
 
         eventAdapter = new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames());
@@ -105,10 +108,16 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(lmaoProgramming) {
+                    //Log.d("minto", "true case");
                     TBAHandler.setCurrentEvent((String) ((TextView) view).getText());
+                    TBAHandler.requestMatchKeys();
+                    SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("currentEventName", TBAHandler.getCurrentEventName());
+                    editor.commit();
                 }
                 else {
-                    eventSpinner.setAdapter(new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames()));
+                    //Log.d("minto", "else case");
                     parent.setSelection(TBAHandler.getCurrentEventIndex());
                     lmaoProgramming = true;
                 }
