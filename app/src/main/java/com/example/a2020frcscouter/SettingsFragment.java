@@ -104,6 +104,8 @@ public class SettingsFragment extends Fragment {
 
         eventSpinner.setAdapter(eventAdapter);
 
+        eventSpinner.setSelection(TBAHandler.getCurrentEventIndex());
+
         eventSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -114,10 +116,11 @@ public class SettingsFragment extends Fragment {
                     SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("currentEventName", TBAHandler.getCurrentEventName());
+                    editor.putString("currentEventKey", TBAHandler.getCurrentEventKey());
                     editor.commit();
                 }
                 else {
-                    //Log.d("minto", "else case");
+                    Log.d("minto", "else case");
                     parent.setSelection(TBAHandler.getCurrentEventIndex());
                     lmaoProgramming = true;
                 }

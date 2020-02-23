@@ -20,6 +20,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -59,9 +63,19 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
         holder.itemView.findViewById(R.id.teamInfoButton).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyAppy.getAppContext(), TeamInfoActivity.class);
-                intent.putExtra("team json", team.toString());
-                MyAppy.getAppContext().startActivity(intent);
+                try {
+                    MainActivity.queue.add(new TBAJSONRequest(Request.Method.GET, TBAHandler.baseURL + "/team/frc" + team.getString("teamNum"), null, new TBATeamListener(team), new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("minto", "JSON Request encountered error");
+                            error.printStackTrace();
+                            Log.v("minto", error.getMessage() + "");
+                        }
+                    }));
+                }
+                catch(JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -124,7 +138,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
             }
             catch(JSONException e) {
                 e.printStackTrace();
-                Log.d("minto", "big yikers");
+                Log.d("minto", "Issue parsing team json in bind() function");
             }
 
             //Log.d("minto", "average: " + Double.toString(average));

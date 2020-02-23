@@ -1,9 +1,5 @@
 package com.example.a2020frcscouter;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 
@@ -25,7 +21,7 @@ public class TBAHandler implements OnSwankListener {
     private static HashMap eventKeys = new HashMap();
     private static ArrayList<String> eventNames = new ArrayList<>();
     public static int matchCounter = 1;
-    private static final String baseURL = "https://www.thebluealliance.com/api/v3";
+    public static final String baseURL = "https://www.thebluealliance.com/api/v3";
     private static final String eventKey = "2019caoc"; //TODO DON'T FORGET TO CHANGE THIS BACK
     private static String currentEventName;
     private static String currentEventKey;
@@ -45,7 +41,7 @@ public class TBAHandler implements OnSwankListener {
 
         String fullURL = baseURL + "/match/" + matchKey;
 
-        TBAMatchJSONRequest request = new TBAMatchJSONRequest(Request.Method.GET, fullURL, null, listener, new Response.ErrorListener() {
+        TBAJSONRequest request = new TBAJSONRequest(Request.Method.GET, fullURL, null, listener, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
             Log.d("minto", "Json Request encountered error");
@@ -133,6 +129,10 @@ public class TBAHandler implements OnSwankListener {
         Log.d("minto", "Current event: " + currentEventName + "     " + currentEventKey);
     }
 
+    public static void setCurrentEventKey(String key) {
+        currentEventKey = key;
+    }
+
     public static int getCurrentEventIndex() {
         return eventNames.indexOf(currentEventName);
     }
@@ -140,6 +140,8 @@ public class TBAHandler implements OnSwankListener {
     public static String getCurrentEventName() {
         return currentEventName;
     }
+
+    public static String getCurrentEventKey() { return currentEventKey;}
 
     public static ArrayList<String> getEventNames() {
         return eventNames;

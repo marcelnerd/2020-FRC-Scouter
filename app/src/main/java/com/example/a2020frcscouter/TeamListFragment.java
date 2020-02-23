@@ -32,7 +32,7 @@ import org.json.JSONObject;
  * Use the {@link TeamListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TeamListFragment extends Fragment {
+public class TeamListFragment extends Fragment implements OnDankListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -106,7 +106,6 @@ public class TeamListFragment extends Fragment {
 
         recMain.setLayoutManager(layoutManager);
         mAdapter = new GolumnRecyleAdapter("teleopPoints");
-        recMain.setAdapter(mAdapter);
         recMain.setHasFixedSize(true);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -153,7 +152,7 @@ public class TeamListFragment extends Fragment {
             }
         });
 
-
+        recMain.setAdapter(mAdapter);
 
         return view;
     }
@@ -215,26 +214,26 @@ public class TeamListFragment extends Fragment {
         return boboAdapter;
     }
 
-//    @Override
-//    public void OnDank(JSONObject teamObject) {
-//        TeamInfoFragment frag = new TeamInfoFragment();
-//        Bundle bundle = new Bundle();
-//
-//        for (Fragment fragment : getFragmentManager().getFragments()) {
-//            getFragmentManager().beginTransaction().remove(fragment).commit();
-//        }
-//        try {
-//            bundle.putString("teamNum", teamObject.getString("teamNum"));
-//        }
-//        catch(JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        frag.setArguments(bundle);
-//
-//        FragmentManager manager = getFragmentManager(); // Might break
-//        FragmentTransaction transaction = manager.beginTransaction();
-//        transaction.add(R.id.mainLayout, frag, "teamInfoFraggy");
-//        transaction.commit();
-//    }
+    @Override
+    public void OnDank(TeamJSONObject teamObject) {
+        TeamInfoFragment frag = new TeamInfoFragment();
+        Bundle bundle = new Bundle();
+
+        for (Fragment fragment : getFragmentManager().getFragments()) {
+            getFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+        try {
+            bundle.putString("teamNum", teamObject.getString("teamNum"));
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
+
+        frag.setArguments(bundle);
+
+        FragmentManager manager = getFragmentManager(); // Might break
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.mainLayout, frag, "teamInfoFraggy");
+        transaction.commit();
+    }
 }

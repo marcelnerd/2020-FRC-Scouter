@@ -23,8 +23,10 @@ import java.util.HashMap;
 public class DataHandler {
 
     public final static String[] scoreKeys2019 = {"teamNum", "cargoPoints", "hatchPanelPoints", "teleopPoints", "autoPoints", "habClimbPoints"}; //TODO replace these keys
+
     public final static String[] genericJsonKeys = {"autoCellsBottom", "autoCellsOuter", "autoCellsInner", "teleopCellsBottom", "teleopCellsOuter", "teleopCellsInner",
             "autoPoints", "autoCellPoints", "controlPanelPoints", "endgamePoints", "teleopPoints", "totalPoints"};
+
     public final static String[] uniqueJsonKeys = {};
 
     public static ArrayList<TeamJSONObject> teamList = new ArrayList<>();
@@ -307,16 +309,18 @@ public class DataHandler {
     }
 
     public static double getScoreAverage(JSONArray arr) {
-        double average = 0;
+        double average = -1;
 
-        try {
-            for (int i = 0; i < arr.length(); i++) {
-                average += (int) arr.get(i);
+        if(arr != null) {
+            average = 0;
+            try {
+                for (int i = 0; i < arr.length(); i++) {
+                    average += (int) arr.get(i);
+                }
+                average /= arr.length();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            average /= arr.length();
-        }
-        catch(JSONException e) {
-            e.printStackTrace();
         }
         return average;
     }

@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,8 +45,11 @@ public class MainActivity extends AppCompatActivity implements TeamInfoFragment.
         mainBottomNav.inflateMenu(R.menu.navigation);
 
         String eventName = sharedPref.getString("currentEventName", "yeet");
-        if(eventName != null) {
+        String eventKey = sharedPref.getString("currentEventKey", "yoink");
+        if(eventName != null && eventKey != null) {
+            Log.d("minto", "Creation event: " + eventName);
             TBAHandler.setCurrentEvent(eventName);
+            TBAHandler.setCurrentEventKey(eventKey);
         }
 
         queue = Volley.newRequestQueue(this);
