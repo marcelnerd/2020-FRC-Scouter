@@ -42,7 +42,6 @@ public class TeamListFragment extends Fragment implements OnDankListener {
     private String mParam1;
     private String mParam2;
 
-    static ListView list;
     public static String TBAKey;
     public static Spinner sortSpinner;
     public static ArrayAdapter<CharSequence> selectionAdapter;
@@ -96,7 +95,6 @@ public class TeamListFragment extends Fragment implements OnDankListener {
 
         recMain = (RecyclerView) view.findViewById(R.id.recMain);
         refreshLayout = view.findViewById(R.id.refreshLayout);
-        list = view.findViewById(R.id.listMain);
         sortSpinner = view.findViewById(R.id.sortSpinner);
         sortSpinner.setAdapter(selectionAdapter);
 
@@ -127,28 +125,13 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                list.setAdapter(getSelectedAdapter(position));
+               // list.setAdapter(getSelectedAdapter(position));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 TBAHandler.requestMatchKeys();
-                list.setAdapter(new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teamNum"));
-            }
-        });
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for (Fragment fragment : getFragmentManager().getFragments()) {
-                    getFragmentManager().beginTransaction().remove(fragment).commit();
-                }
-
-
-                FragmentManager manager = getFragmentManager(); // Might break
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.add(R.id.mainLayout, new TeamInfoFragment2019(), "teamInfoFraggy");
-                transaction.commit();
+                //list.setAdapter(new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teamNum"));
             }
         });
 

@@ -104,8 +104,7 @@ public class SettingsFragment extends Fragment {
 
         eventSpinner.setAdapter(eventAdapter);
 
-        eventSpinner.setSelection(TBAHandler.getCurrentEventIndex());
-
+        //eventSpinner.setSelection(TBAHandler.getCurrentEventIndex());
         eventSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -120,7 +119,7 @@ public class SettingsFragment extends Fragment {
                     editor.commit();
                 }
                 else {
-                    Log.d("minto", "else case");
+                    //Log.d("minto", "else case");
                     parent.setSelection(TBAHandler.getCurrentEventIndex());
                     lmaoProgramming = true;
                 }
@@ -128,10 +127,11 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                eventSpinner.setAdapter(new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames()));
-                parent.setSelection(TBAHandler.getCurrentEventIndex());
+                //eventSpinner.setAdapter(new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames()));
             }
         });
+
+        eventSpinner.setSelection(TBAHandler.getCurrentEventIndex());
 
         return view;
     }
