@@ -42,7 +42,6 @@ public class SettingsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private Spinner eventSpinner;
-    private ArrayAdapter<String> eventAdapter;
 
     private boolean lmaoProgramming;
 
@@ -78,21 +77,7 @@ public class SettingsFragment extends Fragment {
 
         //DataHandler.readSettingsFile();
 
-        lmaoProgramming = false;
-
-        eventAdapter = new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames());
-
-        TBAKeysJSONRequest request = new TBAKeysJSONRequest(Request.Method.GET, "https://www.thebluealliance.com/api/v3/events/2020/simple", null, new TBAEventKeysListener(), new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("minto", "Json Request encountered error");
-                error.printStackTrace();
-                Log.v("minto", error.getMessage() + "");
-            }
-
-        });
-
-        MainActivity.queue.add(request);
+        lmaoProgramming = true;
     }
 
     @Override
@@ -102,9 +87,10 @@ public class SettingsFragment extends Fragment {
 
         eventSpinner = view.findViewById(R.id.eventSpinner);
 
-        eventSpinner.setAdapter(eventAdapter);
+        eventSpinner.setAdapter(new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames()));
 
-        //eventSpinner.setSelection(TBAHandler.getCurrentEventIndex());
+        eventSpinner.setSelection(TBAHandler.getCurrentEventIndex());
+
         eventSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -119,8 +105,6 @@ public class SettingsFragment extends Fragment {
                     editor.commit();
                 }
                 else {
-                    //Log.d("minto", "else case");
-                    parent.setSelection(TBAHandler.getCurrentEventIndex());
                     lmaoProgramming = true;
                 }
             }
@@ -130,8 +114,6 @@ public class SettingsFragment extends Fragment {
                 //eventSpinner.setAdapter(new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames()));
             }
         });
-
-        eventSpinner.setSelection(TBAHandler.getCurrentEventIndex());
 
         return view;
     }

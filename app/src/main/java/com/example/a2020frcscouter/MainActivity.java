@@ -25,7 +25,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
 public class MainActivity extends AppCompatActivity implements TeamInfoFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener, TeamListFragment.OnFragmentInteractionListener {
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements TeamInfoFragment.
         String eventName = sharedPref.getString("currentEventName", "yeet");
         String eventKey = sharedPref.getString("currentEventKey", "yoink");
         if(eventName != null && eventKey != null) {
-            Log.d("minto", "Creation event: " + eventName);
+            Log.d("minto", "Creation event: " + eventName + ", " + eventKey);
             TBAHandler.setCurrentEvent(eventName);
             TBAHandler.setCurrentEventKey(eventKey);
         }
@@ -70,6 +73,18 @@ public class MainActivity extends AppCompatActivity implements TeamInfoFragment.
 
         //DataHandler.readSettingsFile();
         TBAHandler.requestMatchKeys();
+
+        TBAKeysJSONRequest request = new TBAKeysJSONRequest(Request.Method.GET, "https://www.thebluealliance.com/api/v3/events/2020/simple", null, new TBAEventKeysListener(), new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("minto", "Json Request encountered error");
+                error.printStackTrace();
+                Log.v("minto", error.getMessage() + "");
+            }
+
+        });
+
+        MainActivity.queue.add(request);
 
 //        mainBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 //            @Override
@@ -125,14 +140,14 @@ public class MainActivity extends AppCompatActivity implements TeamInfoFragment.
 
             // Again
 
-            FragmentManager fmanager = getSupportFragmentManager(); // Might break
-            FragmentTransaction ftransaction = fmanager.beginTransaction();
-
-            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                ftransaction.remove(fragment);
-            }
-            ftransaction.add(R.id.mainLayout, new SettingsFragment(), "settingsFraggy");
-            ftransaction.commit();
+//            FragmentManager fmanager = getSupportFragmentManager(); // Might break
+//            FragmentTransaction ftransaction = fmanager.beginTransaction();
+//
+//            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+//                ftransaction.remove(fragment);
+//            }
+//            ftransaction.add(R.id.mainLayout, new SettingsFragment(), "settingsFraggy");
+//            ftransaction.commit();
         }
         else if(item.getTitle().equals("List")) {
             FragmentManager manager = getSupportFragmentManager(); // Might break

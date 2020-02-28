@@ -100,7 +100,7 @@ public class TBAHandler implements OnSwankListener {
         }
     }
 
-    public static void setEventKeys(JSONArray eventArray) {
+    public static void setEvents(JSONArray eventArray) {
         try {
             JSONObject tempO;
             for (int i = 0; i < eventArray.length(); i++) {
@@ -126,7 +126,6 @@ public class TBAHandler implements OnSwankListener {
     public static void setCurrentEvent(String name) {
         currentEventName = name;
         currentEventKey = (String) eventKeys.get(name);
-        Log.d("minto", "Current event: " + currentEventName + "     " + currentEventKey);
     }
 
     public static void setCurrentEventKey(String key) {
