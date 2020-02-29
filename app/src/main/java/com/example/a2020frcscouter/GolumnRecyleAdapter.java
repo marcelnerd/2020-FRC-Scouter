@@ -31,11 +31,11 @@ import java.util.ArrayList;
 
 public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapter.GolumnViewHolder> {
     String sortOption;
-    ArrayList<TeamJSONObject> teamList;
 
-    public GolumnRecyleAdapter(String s, ArrayList<TeamJSONObject> t) {
+    public GolumnRecyleAdapter(String s) {
         sortOption = s;
-        teamList = DataHandler.sort(t, sortOption);
+        DataHandler.sort(sortOption);
+        //Log.d("minto", "List in constructor: " + teamList.toString());
     }
 
     public GolumnViewHolder onCreateViewHolder(ViewGroup parent,
@@ -51,7 +51,8 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
     @Override
     public void onBindViewHolder(GolumnViewHolder holder, int position) {
         final int newPosition = holder.getAdapterPosition();
-        final TeamJSONObject team = teamList.get(position);
+        //Log.d("minto", "List in bind: " + teamList.toString());
+        final TeamJSONObject team = DataHandler.teamList.get(position);
         holder.bind(team);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -130,13 +131,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
 
                 for(String s : DataHandler.genericJsonKeys) {
                     if(sortOption.equals(s)) {
-                        //Log.d("minto", s);
-                        statList = team.getJSONArray(s);
-                        for(int i = 0; i < statList.length(); i++) {
-                            average += statList.getInt(i);
-                        }
-                        average /= statList.length();
-                        break;
+                        average = DataHandler.getScoreAverage(team.getJSONArray(s));
                     }
                 }
             }

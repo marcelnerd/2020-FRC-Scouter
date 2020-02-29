@@ -13,8 +13,9 @@
     <string-array name="sort_array">
         <item>Teleop Points</item>
         <item>Autonomous Points</item>
-        <item>Hatch Points</item>
-        <item>Cargo Points</item>
+        <item>Top-Inner Cells</item>
+        <item>Top-Outer Cells</item>
+        <item>Endgame Points</item>
     </string-array>
 
     <!-- Strings related to Settings -->

@@ -47,7 +47,7 @@ public class TBAMatchListener implements Response.Listener<JSONObject> {
         if(TBAHandler.getMatchCounter() == TBAHandler.getMatchKeys().size()) {
             TBAHandler.setMatchCounter(1);
             //TeamListFragment.list.setAdapter(TeamListFragment.getSelectedAdapter(TeamListFragment.sortSpinner.getSelectedItemPosition()));
-            TeamListFragment.recMain.setAdapter(new GolumnRecyleAdapter("teleopPoints", DataHandler.teamList));
+            TeamListFragment.recMain.setAdapter(new GolumnRecyleAdapter("teleopPoints"));
             TeamListFragment.refreshLayout.setRefreshing(false);
 
             //Log.d("minto", TBAHandler.getMatchCounter() + "     " + TBAHandler.getMatchKeys().size());

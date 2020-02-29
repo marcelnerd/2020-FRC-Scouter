@@ -3,14 +3,9 @@ package com.example.a2020frcscouter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,10 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -48,9 +48,54 @@ public class MainActivity extends AppCompatActivity implements TeamInfoFragment.
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setTitle("An Interesting Title");
         getSupportActionBar().setSubtitle("An Interestinger Subtitle");
+
+        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflator.inflate(R.layout.gandalf_toolbar, null);
+        EditText searchText = view.findViewById(R.id.gandalf_search);
+        searchText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    int num = Integer.parseInt(v.getText().toString());
+                    if(DataHandler.teamIsAtSelectedEvent(num)) {
+                        MainActivity.queue.add(new TBAJSONRequest(Request.Method.GET, TBAHandler.baseURL + "/team/frc" + num, null, new TBATeamListener(DataHandler.getTeamJSON(num)), new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("minto", "JSON Request encountered error");
+                                error.printStackTrace();
+                                Log.v("minto", error.getMessage() + "");
+                            }
+                        }));
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "Unable to find team with that number at the selected event", Toast.LENGTH_LONG).show();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        ImageButton settingsButton = view.findViewById(R.id.settingsButton);
+        settingsButton.setOnClickListener(new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getSupportFragmentManager(); // Might break
+                FragmentTransaction transaction = manager.beginTransaction();
+
+                for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                    transaction.remove(fragment);
+                }
+                transaction.add(R.id.mainLayout, new SettingsFragment(), "settingsFraggy");
+                transaction.commit();
+            }
+        });
+
+        getSupportActionBar().setCustomView(view);
+
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
 
         //mainBottomNav = findViewById(R.id.mainBottomNav);
         //mainBottomNav.inflateMenu(R.menu.navigation);
@@ -121,57 +166,57 @@ public class MainActivity extends AppCompatActivity implements TeamInfoFragment.
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if(item.getTitle().equals("Settings")) {
-            FragmentManager manager = getSupportFragmentManager(); // Might break
-            FragmentTransaction transaction = manager.beginTransaction();
-
-            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                transaction.remove(fragment);
-            }
-            transaction.add(R.id.mainLayout, new SettingsFragment(), "settingsFraggy");
-            transaction.commit();
-
-            // Again
-
-//            FragmentManager fmanager = getSupportFragmentManager(); // Might break
-//            FragmentTransaction ftransaction = fmanager.beginTransaction();
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        if(item.getTitle().equals("Settings")) {
+//            FragmentManager manager = getSupportFragmentManager(); // Might break
+//            FragmentTransaction transaction = manager.beginTransaction();
 //
 //            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-//                ftransaction.remove(fragment);
+//                transaction.remove(fragment);
 //            }
-//            ftransaction.add(R.id.mainLayout, new SettingsFragment(), "settingsFraggy");
-//            ftransaction.commit();
-        }
-        else if(item.getTitle().equals("List")) {
-            FragmentManager manager = getSupportFragmentManager(); // Might break
-            FragmentTransaction transaction = manager.beginTransaction();
-
-            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                transaction.remove(fragment);
-            }
-            transaction.add(R.id.mainLayout, new TeamListFragment(), "listFraggy");
-            transaction.commit();
-        }
-
-        //noinspection SimplifiableIfStatement
-        Toast.makeText(MainActivity.this, "Epstein Didn't Kill Himself", Toast.LENGTH_LONG).show();
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation, menu);
-        return true;
-    }
+//            transaction.add(R.id.mainLayout, new SettingsFragment(), "settingsFraggy");
+//            transaction.commit();
+//
+//            // Again
+//
+////            FragmentManager fmanager = getSupportFragmentManager(); // Might break
+////            FragmentTransaction ftransaction = fmanager.beginTransaction();
+////
+////            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+////                ftransaction.remove(fragment);
+////            }
+////            ftransaction.add(R.id.mainLayout, new SettingsFragment(), "settingsFraggy");
+////            ftransaction.commit();
+//        }
+//        else if(item.getTitle().equals("List")) {
+//            FragmentManager manager = getSupportFragmentManager(); // Might break
+//            FragmentTransaction transaction = manager.beginTransaction();
+//
+//            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+//                transaction.remove(fragment);
+//            }
+//            transaction.add(R.id.mainLayout, new TeamListFragment(), "listFraggy");
+//            transaction.commit();
+//        }
+//
+//        //noinspection SimplifiableIfStatement
+//        Toast.makeText(MainActivity.this, "Epstein Didn't Kill Himself", Toast.LENGTH_LONG).show();
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.navigation, menu);
+//        return true;
+//    }
 
     @Override
     public void onPause() {

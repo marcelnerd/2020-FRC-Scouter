@@ -8,20 +8,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 
 /**
@@ -103,7 +101,7 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         //((SimpleItemAnimator) recMain.getItemAnimator()).setSupportsChangeAnimations(false);
 
         recMain.setLayoutManager(layoutManager);
-        mAdapter = new GolumnRecyleAdapter("teleopPoints", DataHandler.teamList);
+        mAdapter = new GolumnRecyleAdapter("teleopPoints");
         recMain.setHasFixedSize(true);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -181,18 +179,24 @@ public class TeamListFragment extends Fragment implements OnDankListener {
 
     public static GolumnRecyleAdapter getSelectedAdapter(int position) {
         GolumnRecyleAdapter boboAdapter = null;
+        //String[] strArray = MyAppy.getAppContext().getResources().getStringArray(R.array.sort_array);
+
+
         switch(position) {
             case 0:
-                boboAdapter = new GolumnRecyleAdapter("teleopPoints", DataHandler.teamList);
+                boboAdapter = new GolumnRecyleAdapter("teleopPoints");
                 break;
             case 1:
-                boboAdapter = new GolumnRecyleAdapter("autoPoints", DataHandler.teamList);
+                boboAdapter = new GolumnRecyleAdapter("autoPoints");
                 break;
             case 2:
-                boboAdapter = new GolumnRecyleAdapter("winRate", DataHandler.teamList);
+                boboAdapter = new GolumnRecyleAdapter("teleopCellsInner");
                 break;
             case 3:
-                //boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "cargoPoints");
+                boboAdapter = new GolumnRecyleAdapter("teleopCellsOuter");
+                break;
+            case 4:
+                boboAdapter = new GolumnRecyleAdapter("endgamePoints");
         }
         return boboAdapter;
     }

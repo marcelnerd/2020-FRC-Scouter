@@ -121,12 +121,14 @@ public class DataHandler {
 
         teams = getMatchData(matchJson); //TODO Have fun changing this
 
-        for(HashMap<String, Object> t: teams) {
-            insertTeamData(t);
-        }
+        if(teams != null) {
+            for (HashMap<String, Object> t : teams) {
+                insertTeamData(t);
+            }
 
-        writeTeamFile();
-        //writeMatchFile();
+            writeTeamFile();
+            //writeMatchFile();
+        }
     }
 
     private static void insertTeamData(HashMap<String, Object> team) { // Inserts the new team data from a match into the accumulated data for the team.
@@ -309,6 +311,36 @@ public class DataHandler {
 
     }
 
+    public static TeamJSONObject getTeamJSON(int teamNum) {
+        try {
+            for (TeamJSONObject t : teamList) {
+                if (t.getInt("teamNum") == teamNum) {
+                    return t;
+                }
+            }
+            return null;
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static boolean teamIsAtSelectedEvent(int teamNum) {
+        try {
+            for (TeamJSONObject t : teamList) {
+                if (t.getInt("teamNum") == teamNum) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static double getScoreAverage(JSONArray arr) {
         double average = -1;
 
@@ -323,12 +355,14 @@ public class DataHandler {
                 e.printStackTrace();
             }
         }
+        average *= 100;
+        average = ((int) average) / 100.0;
         return average;
     }
 
-    public static ArrayList<TeamJSONObject> sort(ArrayList<TeamJSONObject> list, String sortOption) {
+    public static ArrayList<TeamJSONObject> sort(String sortOption) {
         try {
-            return mergeSort(list, sortOption, 0, list.size() - 1);
+            return mergeSort(teamList, sortOption, 0, teamList.size() - 1);
         }
         catch(JSONException e) {
             e.printStackTrace();
@@ -374,7 +408,7 @@ public class DataHandler {
         j = 0; // Initial index of second subarray
         k = l; // Initial index of merged subarray
         while (i < n1 && j < n2) {
-            if ((double) DataHandler.getScoreAverage((JSONArray)L.get(i).get(sortOption)) <= (double) DataHandler.getScoreAverage((JSONArray) R.get(j).get(sortOption))) {
+            if (DataHandler.getScoreAverage((JSONArray)L.get(i).get(sortOption)) >= DataHandler.getScoreAverage((JSONArray) R.get(j).get(sortOption))) {
                 list.remove(k);
                 list.add(k, L.get(i));
                 i++;
