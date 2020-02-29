@@ -27,11 +27,15 @@ import com.android.volley.VolleyError;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
+
 public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapter.GolumnViewHolder> {
     String sortOption;
+    ArrayList<TeamJSONObject> teamList;
 
-    public GolumnRecyleAdapter(String s) {
+    public GolumnRecyleAdapter(String s, ArrayList<TeamJSONObject> t) {
         sortOption = s;
+        teamList = DataHandler.sort(t, sortOption);
     }
 
     public GolumnViewHolder onCreateViewHolder(ViewGroup parent,
@@ -47,7 +51,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
     @Override
     public void onBindViewHolder(GolumnViewHolder holder, int position) {
         final int newPosition = holder.getAdapterPosition();
-        final TeamJSONObject team = DataHandler.teamList.get(position);
+        final TeamJSONObject team = teamList.get(position);
         holder.bind(team);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

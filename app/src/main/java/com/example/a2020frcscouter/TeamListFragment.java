@@ -103,7 +103,7 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         //((SimpleItemAnimator) recMain.getItemAnimator()).setSupportsChangeAnimations(false);
 
         recMain.setLayoutManager(layoutManager);
-        mAdapter = new GolumnRecyleAdapter("teleopPoints");
+        mAdapter = new GolumnRecyleAdapter("teleopPoints", DataHandler.teamList);
         recMain.setHasFixedSize(true);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -125,7 +125,7 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               // list.setAdapter(getSelectedAdapter(position));
+               recMain.setAdapter(getSelectedAdapter(position));
             }
 
             @Override
@@ -179,20 +179,20 @@ public class TeamListFragment extends Fragment implements OnDankListener {
 
     }
 
-    public static GolumnListAdapter getSelectedAdapter(int position) {
-        GolumnListAdapter boboAdapter = null;
+    public static GolumnRecyleAdapter getSelectedAdapter(int position) {
+        GolumnRecyleAdapter boboAdapter = null;
         switch(position) {
             case 0:
-                boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teleopPoints");
+                boboAdapter = new GolumnRecyleAdapter("teleopPoints", DataHandler.teamList);
                 break;
             case 1:
-                boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "autoPoints");
+                boboAdapter = new GolumnRecyleAdapter("autoPoints", DataHandler.teamList);
                 break;
             case 2:
-                boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "hatchPanelPoints");
+                boboAdapter = new GolumnRecyleAdapter("winRate", DataHandler.teamList);
                 break;
             case 3:
-                boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "cargoPoints");
+                //boboAdapter = new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "cargoPoints");
         }
         return boboAdapter;
     }

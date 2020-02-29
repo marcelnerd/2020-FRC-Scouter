@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DataHandler {
 
@@ -323,6 +324,88 @@ public class DataHandler {
             }
         }
         return average;
+    }
+
+    public static ArrayList<TeamJSONObject> sort(ArrayList<TeamJSONObject> list, String sortOption) {
+        try {
+            return mergeSort(list, sortOption, 0, list.size() - 1);
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static ArrayList<TeamJSONObject> mergeSort(ArrayList<TeamJSONObject> list, String sortOption, int l, int r) throws  JSONException{
+        if (l < r) {
+            // Same as (l+r)/2, but avoids overflow for
+            // large l and h
+            int m = l+(r-l)/2;
+
+            // Sort first and second halves
+            list = mergeSort(list, sortOption, l, m);
+            list = mergeSort(list, sortOption, m+1, r);
+
+            list = merge(list, sortOption, l, m, r);
+        }
+        return list;
+    }
+
+    private static ArrayList<TeamJSONObject> merge(ArrayList<TeamJSONObject> list, String sortOption, int l, int m, int r) throws JSONException {
+        int i, j, k;
+        int n1 = m - l + 1;
+        int n2 =  r - m;
+
+        //TeamJSONObject arr[list.size()] = List.asArray(list);
+
+        /* create temp arrays */
+        ArrayList<TeamJSONObject> L = new ArrayList<>();
+        ArrayList<TeamJSONObject> R = new ArrayList<>();
+
+
+        /* Copy data to temp arrays L[] and R[] */
+        for (i = 0; i < n1; i++)
+            L.add(list.get(l + i));
+        for (j = 0; j < n2; j++)
+            R.add(list.get(m + 1+ j));
+
+        /* Merge the temp arrays back into arr[l..r]*/
+        i = 0; // Initial index of first subarray
+        j = 0; // Initial index of second subarray
+        k = l; // Initial index of merged subarray
+        while (i < n1 && j < n2) {
+            if ((double) DataHandler.getScoreAverage((JSONArray)L.get(i).get(sortOption)) <= (double) DataHandler.getScoreAverage((JSONArray) R.get(j).get(sortOption))) {
+                list.remove(k);
+                list.add(k, L.get(i));
+                i++;
+            }
+            else {
+                list.remove(k);
+                list.add(k, R.get(j));
+                j++;
+            }
+            k++;
+        }
+
+    /* Copy the remaining elements of L[], if there
+       are any */
+        while (i < n1) {
+            list.remove(k);
+            list.add(k, L.get(i));
+            i++;
+            k++;
+        }
+
+    /* Copy the remaining elements of R[], if there
+       are any */
+        while (j < n2) {
+            list.remove(k);
+            list.add(k, R.get(j));
+            j++;
+            k++;
+        }
+
+        return list;
     }
 
 //    public ArrayList<String> getAllEventKeys() {
