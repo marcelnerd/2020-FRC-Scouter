@@ -46,12 +46,13 @@ public class TBAMatchListener implements Response.Listener<JSONObject> {
 
         if(TBAHandler.getMatchCounter() == TBAHandler.getMatchKeys().size()) {
             TBAHandler.setMatchCounter(1);
-            //TeamListFragment.list.setAdapter(TeamListFragment.getSelectedAdapter(TeamListFragment.sortSpinner.getSelectedItemPosition()));
-            TeamListFragment.recMain.setAdapter(new GolumnRecyleAdapter("teleopPoints"));
+            TeamListFragment.mAdapter.updateTeamList();
+            //TeamListFragment.recMain.getRecycledViewPool().clear();
+            //TeamListFragment.mAdapter.notifyDataSetChanged();
             TeamListFragment.refreshLayout.setRefreshing(false);
 
             //Log.d("minto", TBAHandler.getMatchCounter() + "     " + TBAHandler.getMatchKeys().size());
-            DataHandler.printTeamsList();
+            //DataHandler.printTeamsList();
         }
         else {
             TBAHandler.setMatchCounter(TBAHandler.getMatchCounter() + 1);

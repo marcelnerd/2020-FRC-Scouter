@@ -45,10 +45,11 @@ public class TeamListFragment extends Fragment implements OnDankListener {
     public static ArrayAdapter<CharSequence> selectionAdapter;
 
     public static RecyclerView recMain;
-    private RecyclerView.Adapter mAdapter;
-    public static RecyclerView.LayoutManager layoutManager;
+    public static GolumnRecyleAdapter mAdapter;
 
     public static SwipeRefreshLayout refreshLayout;
+
+    public static String currentSortOption;
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,6 +83,8 @@ public class TeamListFragment extends Fragment implements OnDankListener {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        currentSortOption = "teleopPoints";
+
         selectionAdapter = ArrayAdapter.createFromResource(MyAppy.getAppContext(), R.array.sort_array, android.R.layout.simple_spinner_item);
         selectionAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
     }
@@ -96,12 +99,11 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         sortSpinner = view.findViewById(R.id.sortSpinner);
         sortSpinner.setAdapter(selectionAdapter);
 
-        layoutManager = new LinearLayoutManager(MyAppy.getAppContext());
-
         //((SimpleItemAnimator) recMain.getItemAnimator()).setSupportsChangeAnimations(false);
 
-        recMain.setLayoutManager(layoutManager);
-        mAdapter = new GolumnRecyleAdapter("teleopPoints");
+        recMain.setLayoutManager(new MercutioLayoutManager(getActivity()));
+        mAdapter = new GolumnRecyleAdapter(currentSortOption);
+        recMain.setAdapter(mAdapter);
         recMain.setHasFixedSize(true);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -114,7 +116,6 @@ public class TeamListFragment extends Fragment implements OnDankListener {
                 //DataHandler.printTeamsList();
 
                 //list.setAdapter(getSelectedAdapter(sortSpinner.getSelectedItemPosition()));
-                recMain.setAdapter(mAdapter);
 
                 //refreshLayout.setRefreshing(false);
             }
@@ -123,7 +124,7 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               recMain.setAdapter(getSelectedAdapter(position));
+               setSelectedAdapter(position);
             }
 
             @Override
@@ -132,8 +133,6 @@ public class TeamListFragment extends Fragment implements OnDankListener {
                 //list.setAdapter(new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teamNum"));
             }
         });
-
-        recMain.setAdapter(mAdapter);
 
         return view;
     }
@@ -177,28 +176,41 @@ public class TeamListFragment extends Fragment implements OnDankListener {
 
     }
 
-    public static GolumnRecyleAdapter getSelectedAdapter(int position) {
+    public static void setSelectedAdapter(int position) {
         GolumnRecyleAdapter boboAdapter = null;
         //String[] strArray = MyAppy.getAppContext().getResources().getStringArray(R.array.sort_array);
 
-
         switch(position) {
             case 0:
-                boboAdapter = new GolumnRecyleAdapter("teleopPoints");
+                //mAdapter = new GolumnRecyleAdapter("teleopPoints");
+                currentSortOption = "teleopPoints";
                 break;
             case 1:
-                boboAdapter = new GolumnRecyleAdapter("autoPoints");
+                //mAdapter = new GolumnRecyleAdapter("autoPoints");
+                currentSortOption = "autoPoints";
                 break;
             case 2:
-                boboAdapter = new GolumnRecyleAdapter("teleopCellsInner");
+                //mAdapter = new GolumnRecyleAdapter("teleopCellsInner");
+                currentSortOption = "teleopCellsInner";
                 break;
             case 3:
-                boboAdapter = new GolumnRecyleAdapter("teleopCellsOuter");
+                //mAdapter = new GolumnRecyleAdapter("teleopCellsOuter");
+                currentSortOption = "teleopCellsOuter";
                 break;
             case 4:
-                boboAdapter = new GolumnRecyleAdapter("endgamePoints");
+                //mAdapter = new GolumnRecyleAdapter("endgamePoints");
+                currentSortOption = "endgamePoints";
         }
-        return boboAdapter;
+
+        mAdapter.updateTeamList();
+        //mAdapter.notifyDataSetChanged();
+        //recMain.getRecycledViewPool().clear();
+        //doTheThing();
+    }
+
+    public static void doTheThing() {
+        mAdapter.updateTeamList();
+        //mAdapter.notifyDataSetChanged();
     }
 
     @Override

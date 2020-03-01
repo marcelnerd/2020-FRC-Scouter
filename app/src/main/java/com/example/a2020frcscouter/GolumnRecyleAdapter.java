@@ -31,10 +31,12 @@ import java.util.ArrayList;
 
 public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapter.GolumnViewHolder> {
     String sortOption;
+    ArrayList<TeamJSONObject> teamList;
 
     public GolumnRecyleAdapter(String s) {
+        super();
         sortOption = s;
-        DataHandler.sort(sortOption);
+        teamList = DataHandler.sort(TeamListFragment.currentSortOption);
         //Log.d("minto", "List in constructor: " + teamList.toString());
     }
 
@@ -44,7 +46,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.team_entry_golumn, parent, false);
 
-        GolumnViewHolder vh = new GolumnViewHolder(v, sortOption);
+        GolumnViewHolder vh = new GolumnViewHolder(v);
         return vh;
     }
 
@@ -52,9 +54,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
     public void onBindViewHolder(GolumnViewHolder holder, int position) {
         final int newPosition = holder.getAdapterPosition();
         //Log.d("minto", "List in bind: " + teamList.toString());
-        final TeamJSONObject team = DataHandler.teamList.get(position);
-        holder.bind(team);
-
+        final TeamJSONObject team = teamList.get(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 //listener.OnDank(team);
@@ -64,6 +64,8 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
                 notifyItemChanged(newPosition);
             }
         });
+
+        holder.bind(team);
 
         holder.itemView.findViewById(R.id.teamInfoButton).setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -87,7 +89,19 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
 
     @Override
     public int getItemCount() {
-        return DataHandler.teamList.size();
+        return teamList.size();
+    }
+
+    public void setSortOption(String option) {
+        sortOption = option;
+    }
+
+    public void updateTeamList() {
+        //teamList.clear();
+
+        teamList = DataHandler.sort(TeamListFragment.currentSortOption);
+        Log.d("minto", "Count: " + TeamListFragment.mAdapter.getItemCount());
+        notifyDataSetChanged();
     }
 
 
@@ -97,10 +111,9 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
     public static class GolumnViewHolder extends RecyclerView.ViewHolder {
         TextView teamNum, teamStat, teleopText, autoText;
         LinearLayout hiddenLayout;
-        String sortOption;
         //Button infoButton;
 
-        public GolumnViewHolder(View itemView, String s) {
+        public GolumnViewHolder(View itemView) {
             super(itemView);
             teamNum = itemView.findViewById(R.id.TeamNumText);
             teamStat = itemView.findViewById(R.id.statText);
@@ -108,8 +121,6 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
             autoText = itemView.findViewById(R.id.autoSubText);
             hiddenLayout = itemView.findViewById(R.id.hiddenTeamEntry);
             //infoButton = itemView.findViewById(R.id.teamInfoButton);
-
-            sortOption = s;
 
             hiddenLayout.setVisibility(View.GONE);
 
@@ -130,7 +141,8 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
                 autoNums = team.getJSONArray("autoPoints");
 
                 for(String s : DataHandler.genericJsonKeys) {
-                    if(sortOption.equals(s)) {
+                    if(TeamListFragment.currentSortOption.equals(s)) {
+                        Log.d("minto", "Sort option: " + TeamListFragment.currentSortOption + "     Found Key: " + s);
                         average = DataHandler.getScoreAverage(team.getJSONArray(s));
                     }
                 }
