@@ -86,7 +86,7 @@ public class TeamListFragment extends Fragment implements OnDankListener {
 
         currentSortOption = "teleopPoints";
 
-        selectionAdapter = ArrayAdapter.createFromResource(MyAppy.getAppContext(), R.array.sort_array, android.R.layout.simple_spinner_item);
+        selectionAdapter = ArrayAdapter.createFromResource(MyAppy.getAppContext(), R.array.sort_array, R.layout.noodle_spinner_item);
         selectionAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
     }
 

@@ -19,7 +19,8 @@
         android:text="Event Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/FunStyle"/>
 
     <Spinner
         android:id="@+id/eventSpinner"
@@ -27,6 +28,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventSelectText" />
+        app:layout_constraintTop_toBottomOf="@+id/eventSelectText"
+        style="@style/FunStyle"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -34,13 +34,15 @@
         android:id="@+id/TopLineView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/black" />
+        android:background="@android:color/black"
+        style="@style/FunStyle"/>
 
     <LinearLayout
         android:id="@+id/hiddenTeamEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        style="@style/FunStyle">
 
         <TextView
             android:id="@+id/teleopSubText"
@@ -48,7 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="Teleop" />
+            android:text="Teleop"
+            style="@style/FunStyle"/>
 
         <TextView
             android:id="@+id/autoSubText"
@@ -56,14 +59,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="Auto" />
+            android:text="Auto"
+            style="@style/FunStyle"/>
 
         <TextView
-            android:id="@+id/winRateSubText"
+            android:id="@+id/climbRateSubText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center_horizontal" />
+            android:gravity="center_horizontal"
+            android:text="Climb Rate"
+            style="@style/FunStyle"/>
 
         <Button
             android:id="@+id/teamInfoButton"
@@ -71,13 +77,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Team Info" />
+            android:text="Team Info"
+            />
     </LinearLayout>
 
     <View
         android:id="@+id/BottomLineView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/black" />
+        android:background="@android:color/black"
+        style="@style/FunStyle"/>
 
 </LinearLayout>

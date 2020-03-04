@@ -27,4 +27,9 @@
 
     <style name="AppTheme.Launcher.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="FunStyle">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+    </style>
+
 </resources>

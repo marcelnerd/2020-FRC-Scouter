@@ -102,7 +102,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
 
 
     public static class GolumnViewHolder extends RecyclerView.ViewHolder {
-        TextView teamNum, teamStat, teleopText, autoText;
+        TextView teamNum, teamStat, teleopText, autoText, climbText;
         LinearLayout hiddenLayout;
         View topLine, bottomLine;
         //Button infoButton;
@@ -113,6 +113,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
             teamStat = itemView.findViewById(R.id.statText);
             teleopText = itemView.findViewById(R.id.teleopSubText);
             autoText = itemView.findViewById(R.id.autoSubText);
+            climbText = itemView.findViewById(R.id.climbRateSubText);
             hiddenLayout = itemView.findViewById(R.id.hiddenTeamEntry);
             topLine = itemView.findViewById(R.id.TopLineView);
             bottomLine = itemView.findViewById(R.id.BottomLineView);
@@ -127,7 +128,7 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
             double average = 0;
             String averageString = "---";
             int num = -1;
-            JSONArray teleopNums = null, autoNums = null;
+            JSONArray teleopNums = null, autoNums = null, climbArray = null;
 
             boolean expanded = team.getExpanded();
             hiddenLayout.setVisibility(expanded ? View.VISIBLE : View.GONE);
@@ -138,9 +139,10 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
                 num = team.getInt("teamNum");
                 teleopNums = team.getJSONArray("teleopPoints");
                 autoNums = team.getJSONArray("autoPoints");
+                climbArray = team.getJSONArray("endgameRobot");
 
                 if(TeamListFragment.currentSortOption.equals("endgameRobot")) {
-                    average = DataHandler.getScoreAverage(team.getJSONArray("endgameRobot"));
+                    average = DataHandler.getScoreAverage(climbArray);
                     averageString = (average*100.0) + "%";
                 }
                 else {
@@ -165,6 +167,8 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
             teamStat.setText(averageString);
             teleopText.setText("Teleop\t\t\n" + DataHandler.getScoreAverage(teleopNums));
             autoText.setText("Autonomous\t\t\n" + DataHandler.getScoreAverage(autoNums));
+            climbText.setText("Climb Rate\t\t\n" + DataHandler.getScoreAverage(climbArray));
+
         }
     }
 }
