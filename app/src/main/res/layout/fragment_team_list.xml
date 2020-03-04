@@ -45,8 +45,20 @@
                 android:spinnerMode="dropdown"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                style="@style/FunStyle"/>
+                />
         </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/noEventSelectedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:text="Please Select An Event"
+            style="@style/FunStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recMain" />
 
     </android.support.constraint.ConstraintLayout>
 

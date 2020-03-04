@@ -128,6 +128,7 @@ public class TBAHandler implements OnSwankListener {
 //        currentEventKey = null;
 //        currentEventName = null;
         Collections.sort(eventNames);
+        Log.d("minto", "aaaa" + eventNames.toString());
         //requestMatchKeys();
     }
 

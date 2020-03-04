@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements TeamInfoFragment.
         //mainBottomNav = findViewById(R.id.mainBottomNav);
         //mainBottomNav.inflateMenu(R.menu.navigation);
 
-        String eventName = sharedPref.getString("currentEventName", "yeet");
-        String eventKey = sharedPref.getString("currentEventKey", "yoink");
+        String eventName = sharedPref.getString("currentEventName", null);
+        String eventKey = sharedPref.getString("currentEventKey", null);
         if(eventName != null && eventKey != null) {
             Log.d("minto", "Creation event: " + eventName + ", " + eventKey);
             TBAHandler.setCurrentEvent(eventName);
@@ -154,20 +154,19 @@ public class MainActivity extends AppCompatActivity implements TeamInfoFragment.
 
         if(eventKey != null) {
             TBAHandler.requestMatchKeys();
-
-
-            TBAKeysJSONRequest request = new TBAKeysJSONRequest(Request.Method.GET, "https://www.thebluealliance.com/api/v3/events/" + TBAHandler.getCurrentYear() + "/simple", null, new TBAEventKeysListener(), new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d("minto", "Json Request encountered error");
-                    error.printStackTrace();
-                    Log.v("minto", error.getMessage() + "");
-                }
-
-            });
-
-            queue.add(request);
         }
+
+        TBAKeysJSONRequest request = new TBAKeysJSONRequest(Request.Method.GET, "https://www.thebluealliance.com/api/v3/events/" + TBAHandler.getCurrentYear() + "/simple", null, new TBAEventKeysListener(), new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("minto", "Json Request encountered error");
+                error.printStackTrace();
+                Log.v("minto", error.getMessage() + "");
+            }
+
+        });
+
+        queue.add(request);
     }
 
     @Override

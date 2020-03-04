@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.a2020frcscouter.R;
 
@@ -47,6 +48,7 @@ public class TeamListFragment extends Fragment implements OnDankListener {
 
     public static RecyclerView recMain;
     public static GolumnRecyleAdapter mAdapter;
+    public static TextView noEventText;
 
     public static SwipeRefreshLayout refreshLayout;
 
@@ -87,7 +89,7 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         currentSortOption = "teleopPoints";
 
         selectionAdapter = ArrayAdapter.createFromResource(MyAppy.getAppContext(), R.array.sort_array, R.layout.noodle_spinner_item);
-        selectionAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        selectionAdapter.setDropDownViewResource(R.layout.noodle_spinner_item);
     }
 
     @Override
@@ -95,6 +97,7 @@ public class TeamListFragment extends Fragment implements OnDankListener {
         View view = inflater.inflate(R.layout.fragment_team_list, container, false);
         view.setBackgroundColor(Color.WHITE);
 
+        noEventText = view.findViewById(R.id.noEventSelectedText);
         recMain = (RecyclerView) view.findViewById(R.id.recMain);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         sortSpinner = view.findViewById(R.id.sortSpinner);
@@ -134,6 +137,17 @@ public class TeamListFragment extends Fragment implements OnDankListener {
                 //list.setAdapter(new GolumnListAdapter(MyAppy.getAppContext(), R.layout.team_entry_golumn, DataHandler.teamList, "teamNum"));
             }
         });
+
+        if(TBAHandler.getCurrentEventKey() == null) {
+            sortSpinner.setVisibility(View.GONE);
+            recMain.setVisibility(View.GONE);
+            noEventText.setVisibility(View.VISIBLE);
+        }
+        else {
+            sortSpinner.setVisibility(View.VISIBLE);
+            recMain.setVisibility(View.VISIBLE);
+            noEventText.setVisibility(View.GONE);
+        }
 
         return view;
     }

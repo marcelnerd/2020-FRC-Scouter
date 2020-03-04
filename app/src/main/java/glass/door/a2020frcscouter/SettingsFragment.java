@@ -92,7 +92,11 @@ public class SettingsFragment extends Fragment {
         eventSpinner = view.findViewById(R.id.eventSpinner);
         //yearSpinner = view.findViewById(R.id.yearSpinner);
 
-        eventSpinner.setAdapter(new ArrayAdapter<>(MyAppy.getAppContext(), android.R.layout.simple_spinner_item, TBAHandler.getEventNames()));
+        Log.d("minto", "dfdf" + TBAHandler.getEventNames());
+
+        ArrayAdapter<String> a = new ArrayAdapter<>(MyAppy.getAppContext(), R.layout.noodle_spinner_item, TBAHandler.getEventNames());
+        a.setDropDownViewResource(R.layout.noodle_spinner_item);
+        eventSpinner.setAdapter(a);
 
 //        for(int i = 2020; i >= 2000; i--) {
 //            yearList.add(i);
