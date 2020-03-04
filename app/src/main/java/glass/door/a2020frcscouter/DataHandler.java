@@ -82,6 +82,12 @@ public class DataHandler {
                         infoTable[x].put("endgameRobot", blueJSON.get("endgameRobot" + (x + 1)));
                         infoTable[x + 3].put("endgameRobot", redJSON.get("endgameRobot" + (x + 1)));
                 }
+
+//                if(matchJSON.getString("comp_level").equals("qm")) {
+//                    Log.d("minto", "Case hit");
+//                    infoTable[x].put("rp", blueJSON.get("rp"));
+//                    infoTable[x + 3].put("rp", redJSON.get("rp"));
+//                }
             }
 
             for(Object e: infoTable){
@@ -129,50 +135,71 @@ public class DataHandler {
 
     private static void insertTeamData(HashMap<String, Object> team) { // Inserts the new team data from a match into the accumulated data for the team.
         //I think it's done. Not positive
-        TeamJSONObject temp;
-        JSONArray tempArr = new JSONArray();
+        synchronized (teamList) {
+            TeamJSONObject temp;
+            JSONArray tempArr = new JSONArray();
 
-        for(int i = 0; i < teamList.size(); i++) {
-            try {
-                if (teamList.get(i).getInt("teamNum") == Integer.parseInt(team.get("teamNum").toString())) {
-                    temp = teamList.get(i);
-                    for(int n = 1; n < genericJsonKeys.length; n++) {
-                        temp.accumulate(genericJsonKeys[n], team.get(genericJsonKeys[n]));
-                    }
-                    if(team.get("endgameRobot") != null) {
-                        //Log.d("minto", "Case called");
-                        if (team.get("endgameRobot").equals("Hang")) {
-                            temp.accumulate("endgameRobot", 1);
+            for (int i = 0; i < teamList.size(); i++) {
+                try {
+                    if (teamList.get(i).getInt("teamNum") == Integer.parseInt(team.get("teamNum").toString())) {
+                        temp = teamList.get(i);
+                        for (int n = 1; n < genericJsonKeys.length; n++) {
+                            temp.accumulate(genericJsonKeys[n], team.get(genericJsonKeys[n]));
                         }
-                        else {
+                        if (team.get("endgameRobot") != null) {
+                            //Log.d("minto", "Case called");
+                            if (team.get("endgameRobot").equals("Hang")) {
+                                temp.accumulate("endgameRobot", 1);
+                            } else {
+                                temp.accumulate("endgameRobot", 0);
+                            }
+                        } else {
                             temp.accumulate("endgameRobot", 0);
                         }
-                    }
-                    else {
-                        temp.accumulate("endgameRobot", 0);
-                    }
 
-                    teamList.set(i, temp);
-                    return;
+                        teamList.set(i, temp);
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.v("minto", "I don't even know what this exception is for, but since that's not a very helpful error message, this is midway down the insertTeamData() function");
                 }
+            }
+
+            //If the code reaches this point, there is not an entry for the team, and one must be created
+            TeamJSONObject newTeam = new TeamJSONObject();
+            try {
+                newTeam.put("teamNum", Integer.parseInt(team.get("teamNum").toString()));
+                teamList.add(newTeam);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //Create the empty team, and recursively call the function and allow it to add the appropriate values
+            insertTeamData(team);
+        }
+    }
+
+    public static void updateRanks(JSONObject response) {
+        synchronized (teamList) {
+            int tempTeamNum;
+            try {
+                JSONArray teamsArray = response.getJSONArray("rankings");
+                for(int i = 0; i < teamsArray.length(); i++) {
+                    tempTeamNum = Integer.parseInt(((JSONObject) teamsArray.get(i)).getString("team_key").substring(3));
+                    for(int x = 0; x<teamList.size(); x++) {
+                        if(teamList.get(x).getInt("teamNum") == tempTeamNum) {
+                            teamList.get(x).put("rank", Integer.parseInt(((JSONObject) teamsArray.get(i)).getString("rank")));
+                        }
+                    }
+                }
+
+
             }
             catch(JSONException e) {
                 e.printStackTrace();
-                Log.v("minto", "I don't even know what this exception is for, but since that's not a very helpful error message, this is midway down the insertTeamData() function");
+                Log.v("minto", "Problem in the updateRanks() function");
             }
         }
-
-        //If the code reaches this point, there is not an entry for the team, and one must be created
-        TeamJSONObject newTeam = new TeamJSONObject();
-        try {
-            newTeam.put("teamNum",  Integer.parseInt(team.get("teamNum").toString()));
-            teamList.add(newTeam);
-        }
-        catch(JSONException e) {
-            e.printStackTrace();
-        }
-        //Create the empty team, and recursively call the function and allow it to add the appropriate values
-        insertTeamData(team);
     }
 
     private static ArrayList<TeamJSONObject> readTeamFile() throws JSONException {
@@ -370,6 +397,10 @@ public class DataHandler {
         return average;
     }
 
+    public static int indexOfTeam(TeamJSONObject team) {
+        return teamList.indexOf(team);
+    }
+
     public static ArrayList<TeamJSONObject> sort() {
         try {
             return mergeSort(teamList, 0, teamList.size() - 1);
@@ -435,14 +466,27 @@ public class DataHandler {
                     tempRVal = (Integer) R.get(j).get(TeamListFragment.currentSortOption);
                 }
 
-                if (tempLVal >= tempRVal) {
-                    list.remove(k);
-                    list.add(k, L.get(i));
-                    i++;
-                } else {
-                    list.remove(k);
-                    list.add(k, R.get(j));
-                    j++;
+                if(TeamListFragment.currentSortOption.equals("rank")) {
+                    if (tempLVal <= tempRVal) {
+                        list.remove(k);
+                        list.add(k, L.get(i));
+                        i++;
+                    } else {
+                        list.remove(k);
+                        list.add(k, R.get(j));
+                        j++;
+                    }
+                }
+                else {
+                    if (tempLVal >= tempRVal) {
+                        list.remove(k);
+                        list.add(k, L.get(i));
+                        i++;
+                    } else {
+                        list.remove(k);
+                        list.add(k, R.get(j));
+                        j++;
+                    }
                 }
                 k++;
             }

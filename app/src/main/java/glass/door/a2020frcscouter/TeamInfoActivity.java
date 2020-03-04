@@ -57,7 +57,8 @@ public class TeamInfoActivity extends AppCompatActivity {
             if(scoresJson != null) {
 
                 teamScoresText.setText("Average Scores From Selected Event");
-                teamScoresText.append("\n\nTotal Points: " + DataHandler.getScoreAverage(scoresJson.getJSONArray("totalPoints")));
+                teamScoresText.append("\n\nRank: " + scoresJson.getInt("rank"));
+                teamScoresText.append("\nTotal Points: " + DataHandler.getScoreAverage(scoresJson.getJSONArray("totalPoints")));
                 teamScoresText.append("\nClimb Rate" + DataHandler.getScoreAverage(scoresJson.getJSONArray("endgameRobot")));
                 //teamScoresText.append("\nWin Rate: " + "YET TO BE IMPLEMENTED");
                 teamScoresText.append("\n\nTeleop");

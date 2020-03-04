@@ -59,11 +59,10 @@ public class TBAHandler implements OnSwankListener {
         if(TeamListFragment.refreshLayout != null) {
             TeamListFragment.refreshLayout.setRefreshing(true);
         }
-        TBAMatchKeysListener listener = new TBAMatchKeysListener();
         String fullURL = baseURL + "/event/" + currentEventKey + "/matches/keys";
 
-
-        TBAKeysJSONRequest request = new TBAKeysJSONRequest(Request.Method.GET, fullURL, null, listener, new Response.ErrorListener() {
+        Log.d("minto", "From requestMatchKeys()     " + fullURL);
+        MainActivity.queue.add(new TBAKeysJSONRequest(Request.Method.GET, baseURL + "/event/" + currentEventKey + "/matches/keys", null, new TBAMatchKeysListener(), new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("minto", "Json Request encountered error");
@@ -71,11 +70,16 @@ public class TBAHandler implements OnSwankListener {
                 Log.v("minto", error.getMessage() + "");
             }
 
-        });
+        }));
 
-        Log.d("minto", fullURL);
-        MainActivity.queue.add(request);
-
+        MainActivity.queue.add(new TBAJSONRequest(Request.Method.GET, TBAHandler.baseURL + "/event/" + TBAHandler.getCurrentEventKey() + "/rankings", null, new TeamRanksListener(), new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("minto", "JSON Request encountered error");
+                error.printStackTrace();
+                Log.v("minto", error.getMessage() + "");
+            }
+        }));
     }
 
     public static void setMatchKeys(JSONArray keyArray) {
@@ -128,7 +132,7 @@ public class TBAHandler implements OnSwankListener {
 //        currentEventKey = null;
 //        currentEventName = null;
         Collections.sort(eventNames);
-        Log.d("minto", "aaaa" + eventNames.toString());
+        //Log.d("minto", "aaaa" + eventNames.toString());
         //requestMatchKeys();
     }
 

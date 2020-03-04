@@ -102,13 +102,14 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
 
 
     public static class GolumnViewHolder extends RecyclerView.ViewHolder {
-        TextView teamNum, teamStat, teleopText, autoText, climbText;
+        TextView teamNum, teamStat, teleopText, autoText, climbText, rankText;
         LinearLayout hiddenLayout;
         View topLine, bottomLine;
         //Button infoButton;
 
         public GolumnViewHolder(View itemView) {
             super(itemView);
+            rankText = itemView.findViewById(R.id.rankText);
             teamNum = itemView.findViewById(R.id.TeamNumText);
             teamStat = itemView.findViewById(R.id.statText);
             teleopText = itemView.findViewById(R.id.teleopSubText);
@@ -126,8 +127,8 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
         public void bind(final TeamJSONObject team) {
             JSONArray statList;
             double average = 0;
-            String averageString = "---";
-            int num = -1;
+            String statString = "---";
+            int num = -1, rank = -23;
             JSONArray teleopNums = null, autoNums = null, climbArray = null;
 
             boolean expanded = team.getExpanded();
@@ -140,20 +141,33 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
                 teleopNums = team.getJSONArray("teleopPoints");
                 autoNums = team.getJSONArray("autoPoints");
                 climbArray = team.getJSONArray("endgameRobot");
+                rank = team.getInt("rank");
+
+
+                //Log.d("minto", num + "      " + team.getJSONArray(TeamListFragment.currentSortOption).toString());
 
                 if(TeamListFragment.currentSortOption.equals("endgameRobot")) {
                     average = DataHandler.getScoreAverage(climbArray);
-                    averageString = (average*100.0) + "%";
+                    statString = (average*100.0) + "%";
                 }
                 else {
-                    for (String s : DataHandler.genericJsonKeys) {
-                        if (TeamListFragment.currentSortOption.equals(s)) {
-                            //Log.d("minto", "Sort option: " + TeamListFragment.currentSortOption + "     Found Key: " + s);
-                            average = DataHandler.getScoreAverage(team.getJSONArray(s));
-                            //Log.d("minto", "Array: " + team.getJSONArray(s));
-                        }
+                    if(TeamListFragment.currentSortOption.equals("rank")) {
+                        Log.d("minto", "Rank maybe: " + team.getInt("rank"));
+                        average = rank;
                     }
-                    averageString = Double.toString(average);
+                    else {
+                        average = DataHandler.getScoreAverage(team.getJSONArray(TeamListFragment.currentSortOption));
+                    }
+
+                    if(TeamListFragment.currentSortOption.equals("rp")) {
+                        statString = Integer.toString(DataHandler.indexOfTeam(team)+1);
+                    }
+                    else if(TeamListFragment.currentSortOption.equals("rank")) {
+                        statString = Integer.toString((int) average);
+                    }
+                    else {
+                        statString = Double.toString(average);
+                    }
                 }
 
             }
@@ -164,7 +178,9 @@ public class GolumnRecyleAdapter extends RecyclerView.Adapter<GolumnRecyleAdapte
 
             //Log.d("minto", "average: " + Double.toString(average));
             teamNum.setText(Integer.toString(num));
-            teamStat.setText(averageString);
+            teamStat.setText(statString);
+
+            rankText.setText("Rank\t\t\n" + rank);
             teleopText.setText("Teleop\t\t\n" + DataHandler.getScoreAverage(teleopNums));
             autoText.setText("Autonomous\t\t\n" + DataHandler.getScoreAverage(autoNums));
             climbText.setText("Climb Rate\t\t\n" + DataHandler.getScoreAverage(climbArray));

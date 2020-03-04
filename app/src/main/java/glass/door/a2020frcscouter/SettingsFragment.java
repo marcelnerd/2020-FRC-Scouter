@@ -92,7 +92,7 @@ public class SettingsFragment extends Fragment {
         eventSpinner = view.findViewById(R.id.eventSpinner);
         //yearSpinner = view.findViewById(R.id.yearSpinner);
 
-        Log.d("minto", "dfdf" + TBAHandler.getEventNames());
+        //Log.d("minto", "dfdf" + TBAHandler.getEventNames());
 
         ArrayAdapter<String> a = new ArrayAdapter<>(MyAppy.getAppContext(), R.layout.noodle_spinner_item, TBAHandler.getEventNames());
         a.setDropDownViewResource(R.layout.noodle_spinner_item);

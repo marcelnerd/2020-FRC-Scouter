@@ -219,6 +219,8 @@ public class TeamListFragment extends Fragment implements OnDankListener {
             case 5:
                 currentSortOption = "endgameRobot";
                 break;
+            case 6:
+                currentSortOption = "rank";
             default:
                 Log.v("minto", "Dude seriously how did you even manage to do this????? Bottom of sortSpinner selection adapter you absolute moron");
         }
