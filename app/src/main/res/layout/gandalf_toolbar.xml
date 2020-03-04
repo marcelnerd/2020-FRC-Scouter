@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/gandalf_layout"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <android.support.constraint.ConstraintLayout
@@ -15,7 +15,7 @@
             android:id="@+id/gandalf_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Search For Team"
+            android:hint="Search For Team At Selected Event"
             android:imeOptions="actionSearch"
             android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"

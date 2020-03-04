@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/listEntryLayout"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/TeamNumText"
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:text="Team Number"
             android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -27,8 +27,14 @@
             android:layout_marginStart="52dp"
             android:layout_marginLeft="52dp"
             android:text="Stat Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/TopLineView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
 
     <LinearLayout
         android:id="@+id/hiddenTeamEntry"
@@ -57,8 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="Win Rate" />
+            android:gravity="center_horizontal" />
 
         <Button
             android:id="@+id/teamInfoButton"
@@ -68,5 +73,11 @@
             android:layout_weight="1"
             android:text="Team Info" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/BottomLineView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
 
 </LinearLayout>

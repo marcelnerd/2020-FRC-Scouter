@@ -5,23 +5,28 @@
     android:id="@+id/settingsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsFragment">
+    tools:context="glass.door.a2020frcscouter.SettingsFragment">
 
     <TextView
         android:id="@+id/eventSelectText"
         android:layout_width="99dp"
         android:layout_height="25dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="156dp"
+        android:layout_marginLeft="156dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="156dp"
         android:layout_marginRight="156dp"
         android:text="Event Name"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/eventSpinner"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/eventSelectText"
-        tools:layout_editor_absoluteX="1dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventSelectText" />
+
 </android.support.constraint.ConstraintLayout>

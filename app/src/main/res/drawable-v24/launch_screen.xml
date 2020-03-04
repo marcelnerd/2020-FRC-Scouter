@@ -10,7 +10,7 @@
     <item>
 
         <bitmap
-            android:src="@mipmap/ic_logo_maybe"
+            android:src="@mipmap/ic_trojan_robotics"
             android:gravity="center"/>
 
     </item>

@@ -5,7 +5,7 @@
     android:id="@+id/teamInfoConstraintView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TeamInfoFragment">
+    tools:context="glass.door.a2020frcscouter.TeamInfoFragment">
 
     <TextView
         android:id="@+id/infoTeamText"

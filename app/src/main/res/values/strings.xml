@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FRC 2020 Scouting</string>
+    <string name="app_name">FRC Scouter</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -16,6 +16,7 @@
         <item>Top-Inner Cells</item>
         <item>Top-Outer Cells</item>
         <item>Endgame Points</item>
+        <item>Climb Rate</item>
     </string-array>
 
     <!-- Strings related to Settings -->

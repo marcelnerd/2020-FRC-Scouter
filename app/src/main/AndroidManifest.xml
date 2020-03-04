@@ -5,19 +5,19 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".MyAppy"
+        android:name="glass.door.a2020frcscouter.MyAppy"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_logo"
+        android:icon="@mipmap/ic_trojan_robotics"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_logo_round"
+        android:roundIcon="@mipmap/ic_trojan_robotics"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher">
         <activity
-            android:name=".TeamInfoActivity"
+            android:name="glass.door.a2020frcscouter.TeamInfoActivity"
             android:label="@string/title_activity_team_info"
-            android:theme="@style/AppTheme.Launcher"></activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name="glass.door.a2020frcscouter.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Launcher"
             >
