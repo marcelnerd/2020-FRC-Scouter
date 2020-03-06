@@ -28,6 +28,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.example.a2020frcscouter.R;
 
+import java.util.InputMismatchException;
+
 public class MainActivity extends AppCompatActivity implements TeamInfoFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener, TeamListFragment.OnFragmentInteractionListener {
     public static SharedPreferences sharedPref;
     public static String TBAKey;
@@ -55,7 +57,15 @@ public class MainActivity extends AppCompatActivity implements TeamInfoFragment.
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    int num = Integer.parseInt(v.getText().toString());
+                    int num = -6334;
+                    try {
+                        num = Integer.parseInt(v.getText().toString());
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(MainActivity.this, "Invalid Entry", Toast.LENGTH_SHORT).show();
+                    }
+
                     TeamJSONObject scoreJson;
                     if(DataHandler.teamIsAtSelectedEvent(num)) {
                         scoreJson = DataHandler.getTeamJSON(num);
